@@ -5,7 +5,14 @@
 #include <vector>
 
 namespace ProjSearch {
-	
-}
+  class ProjectRepository {
+    private:
+      vector<string> projectPath;
+    public:
+      ProjectRepository();
+
+
+  };
+};
 
 #endif
