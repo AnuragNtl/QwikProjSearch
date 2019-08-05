@@ -4,12 +4,19 @@
 #include <string>
 #include <vector>
 
+#define FILE_TYPE_BINARY 0
+#define FILE_TYPE_TEXT 1
+
 namespace ProjSearch {
   class ProjectRepository {
     private:
-      vector<string> projectPath;
+    	Io *io;
+      map<string, vector<string> > projectPath;
     public:
-      ProjectRepository();
+      ProjectRepository(Io *io);
+      void addProject(string projectPath);
+      void addProjectContainerDirectory(string projectDirPath);
+      string searchInSpecificProjects(vector<string> projects);
 
 
   };
