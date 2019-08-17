@@ -17,6 +17,8 @@ namespace ProjSearch {
 		virtual bool isFile(string) const = 0;
 		virtual vector<string> listDirectory(string) const = 0;
 	};
+  
+  Io* getDefaultIoProvider();
 };
 
 #endif
