@@ -16,7 +16,7 @@ namespace ProjSearch {
 	public:
 		Searcher(string filePath);
 		Searcher(char *data);
-		virtual SearchResults searchFor(vector<string>) {}
+		virtual vector<SearchResults> searchFor(vector<string>) { return vector<SearchResults>();}
 		~Searcher();
 	};
 };

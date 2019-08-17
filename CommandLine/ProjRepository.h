@@ -15,6 +15,7 @@ namespace ProjSearch {
     private:
     	Io *io;
       map<string, vector<string> > projectPath;
+      
     public:
       explicit ProjectRepository(Io *io);
       void addProject(string projectPath);
