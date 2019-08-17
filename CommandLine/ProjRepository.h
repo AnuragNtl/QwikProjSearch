@@ -8,18 +8,33 @@
 #define FILE_TYPE_BINARY 0
 #define FILE_TYPE_TEXT 1
 
+using namespace std;
+
 namespace ProjSearch {
   class ProjectRepository {
     private:
     	Io *io;
       map<string, vector<string> > projectPath;
     public:
-      ProjectRepository(Io *io);
+      explicit ProjectRepository(Io *io);
       void addProject(string projectPath);
+      void addProjectContainerDirectory(string projectDirPath, set<string> exclude);
       void addProjectContainerDirectory(string projectDirPath);
-      string searchInSpecificProjects(vector<string> projects);
+      string searchInSpecificProjects(vector<string> projects, string regex);
+      string searchInAllProjects(string regex);
+      vector<string> findProjects(string regex);
+      friend class ProjectListFilter;
+  };
+
+  class ProjectListFilter {
+  private:
+    ProjectRepository *projectRepository;
+    set<string> excludedDirectories;
+  public:
+    explicit ProjectListFilter(ProjectRepository *);
+    ProjectListFilter(ProjectRepository *, set<string>);
+    bool operator()(string directory);
   };
 };
 
 #endif
-
