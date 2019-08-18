@@ -3,12 +3,13 @@
 
 #include "Searcher.h"
 
-class FileSystemSearcher : public Searcher {
-public:
-	FileSystemSearcher(string filePath) : Searcher(filePath) {
-		
-	}
+namespace ProjSearch {
+	class FileSystemSearcher : public Searcher {
+	public:
+		FileSystemSearcher(string filePath);
+		FileSystemSearcher(char *data);
+		vector<SearchResults> searchFor(vector<string>);
+	};
 };
-
 #endif
 
