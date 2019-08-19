@@ -5,6 +5,8 @@
 
 namespace ProjSearch {
 	class FileSystemSearcher : public Searcher {
+	private:
+		string filePath;
 	public:
 		FileSystemSearcher(string filePath);
 		FileSystemSearcher(char *data);

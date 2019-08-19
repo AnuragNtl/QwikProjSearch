@@ -4,9 +4,7 @@
 using namespace ProjSearch;
 
 
-FileSystemSearcher :: FileSystemSearcher(string filePath) : Searcher(filePath) {}
-
-FileSystemSearcher :: FileSystemSearcher(char *data) : Searcher(data) {}
+FileSystemSearcher :: FileSystemSearcher(string fPath) : Searcher(fPath), filePath(fPath) {}
 
 vector<SearchResults> searchFor(vector<string> regexes) {
 	vector<SearchResults> searchResults;
@@ -15,7 +13,7 @@ vector<SearchResults> searchFor(vector<string> regexes) {
 		boost::smatch matches;
 		if(boost::regex_search(data, matches, expr)) {
     for(auto it = matches.begin(); it != matches.end(); it++) {
-      searchResults.s
+      searchResults.insert(SearchResults())
     }
 		}
 	});

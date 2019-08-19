@@ -2,8 +2,10 @@
 
 using namespace ProjSearch;
 
+SearchResults :: SearchResults(string filePath, int row, int col, int offset, int fType) : filePath(filePath), row(row), col(col), offset(offset), fileType(fType) {}
+
 Searcher :: Searcher(char *data) {
-	this->data = data;	
+	this->pData = data;	
 }
 
 Searcher :: Searcher(string filePath) : data(NULL) {
@@ -25,4 +27,8 @@ void Searcher :: readFromPath(string filePath) {
 	}
 	data = new char[fileData.size() + 1];
 	strcpy(data, fileData.c_str());
+}
+
+Searcher :: ~Searcher() {
+	delete[] pData;
 }

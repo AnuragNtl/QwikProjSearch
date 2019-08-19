@@ -1,9 +1,15 @@
 #ifndef SEARCHER_H
 #define SEARCHER_H
 
+#include <string>
+#include <vector>
+
+using namespace std;
+
 namespace ProjSearch {
 	struct SearchResults {
 
+		SearchResults(string filePath, int row, int col, int, int);
 		string filePath;
 		int row, col;
 		int offset;
@@ -11,8 +17,10 @@ namespace ProjSearch {
 	};
 
 	class Searcher {
+	private:
+		void readFromPath(string filePath);
 	protected:
-		char *data;
+		char *dPata;
 	public:
 		Searcher(string filePath);
 		Searcher(char *data);
