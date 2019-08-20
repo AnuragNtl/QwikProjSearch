@@ -13,7 +13,7 @@ vector<SearchResults> searchFor(vector<string> regexes) {
 		boost::smatch matches;
 		if(boost::regex_search(data, matches, expr)) {
     for(auto it = matches.begin(); it != matches.end(); it++) {
-      searchResults.insert(SearchResults())
+      searchResults.insert(SearchResults(filePath, 0 , 0, *it-pData, 0));
     }
 		}
 	});
