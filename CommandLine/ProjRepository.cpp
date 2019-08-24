@@ -1,4 +1,4 @@
-#include "ProjectRepository.h"
+#include "ProjRepository.h"
 
 
 using namespace ProjSearch;
@@ -38,5 +38,9 @@ void ProjectRepository :; addProjectContainerDirectory(string projectDirPath) {
 }
 
 void Projectrepository :: searchInSpecificProjects(vector<string> projects, string regex) {
-
+	for(auto project = projects.begin(); project != projects.end(); project++) {
+		if(!projectPath.find(*project)) {
+			
+		}
+}
 }
