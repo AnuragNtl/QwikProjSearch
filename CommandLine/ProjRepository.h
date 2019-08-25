@@ -15,14 +15,14 @@ namespace ProjSearch {
     private:
     	Io *io;
       map<string, vector<string> > projectPath;
-      
+      Searcher *searcher;
     public:
-      explicit ProjectRepository(Io *io);
+      explicit ProjectRepository(Io *io, Searcher *);
       void addProject(string projectPath);
       void addProjectContainerDirectory(string projectDirPath, set<string> exclude);
       void addProjectContainerDirectory(string projectDirPath);
-      string searchInSpecificProjects(vector<string> projects, string regex);
-      string searchInAllProjects(string regex);
+      vector<SearchResults> searchInSpecificProjects(vector<string> projects, vector<string> regex);
+      vector<SearchResults> searchInAllProjects(vector<string> regex);
       vector<string> findProjects(string regex);
       friend class ProjectListFilter;
   };

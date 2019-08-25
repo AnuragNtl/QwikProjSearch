@@ -13,7 +13,7 @@ bool ProjectListFilter :: operator()(string directory) {
 	return projectRepository->io->isDirectory(directory) && excludedDirectories.find(directory) != excludedDirectories.end();
 }
 
-ProjectRepository :: ProjectRepository(Io *io) : io(io) {}
+ProjectRepository :: ProjectRepository(Io *io, Searcher *s) : io(io), searcher(s) {}
 
 void ProjectRepository :: addProject(string projectPath) {
 	vector<string> projectPathVector;
@@ -37,10 +37,10 @@ void ProjectRepository :; addProjectContainerDirectory(string projectDirPath) {
 	addProjectContainerDirectory(projectDirPath, set<string>());
 }
 
-void Projectrepository :: searchInSpecificProjects(vector<string> projects, string regex) {
+void Projectrepository :: searchInSpecificProjects(vector<string> projects, vector<string> regex) {
 	for(auto project = projects.begin(); project != projects.end(); project++) {
 		if(!projectPath.find(*project)) {
-			
+			searcher->searchFor(regex)
 		}
 }
 }
