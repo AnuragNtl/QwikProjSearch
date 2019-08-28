@@ -9,7 +9,6 @@ namespace ProjSearch {
 		string filePath;
 	public:
 		FileSystemSearcher(string filePath);
-		FileSystemSearcher(char *data);
 		vector<SearchResults> searchFor(vector<string>);
 	};
 };

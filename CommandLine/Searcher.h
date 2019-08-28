@@ -20,11 +20,9 @@ namespace ProjSearch {
 	private:
 		void readFromPath(string filePath);
 	protected:
-		char *dPata;
+		char *pData;
 	public:
-		Searcher(string filePath);
-		Searcher(char *data);
-		virtual vector<SearchResults> searchFor(vector<string>) { return vector<SearchResults>();}
+		virtual vector<SearchResults> searchFor(char *data, vector<string>) { return vector<SearchResults>();}
 		~Searcher();
 	};
 };

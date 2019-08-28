@@ -4,9 +4,9 @@
 using namespace ProjSearch;
 
 
-FileSystemSearcher :: FileSystemSearcher(string fPath) : Searcher(fPath), filePath(fPath) {}
+FileSystemSearcher :: FileSystemSearcher(string fPath) : filePath(fPath) {}
 
-vector<SearchResults> searchFor(vector<string> regexes) {
+vector<SearchResults> FileSystemSearcher :: searchFor(vector<string> regexes) {
 	vector<SearchResults> searchResults;
   for_each(regexes.begin(), regexes.end(), [] (string regex) {
 		boost::regex expr{regex};
@@ -17,4 +17,6 @@ vector<SearchResults> searchFor(vector<string> regexes) {
     }
 		}
 	});
+  return searchResults;
 }
+
