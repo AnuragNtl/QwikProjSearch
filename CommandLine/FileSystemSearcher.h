@@ -5,11 +5,9 @@
 
 namespace ProjSearch {
 	class FileSystemSearcher : public Searcher {
-	private:
-		string filePath;
 	public:
-		FileSystemSearcher(string filePath);
 		vector<SearchResults> searchFor(char *, vector<string>);
+		vector<SearchResults> searchFor(string filePath, vector<string>);
 	};
 };
 #endif
