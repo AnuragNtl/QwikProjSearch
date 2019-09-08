@@ -37,10 +37,10 @@ void ProjectRepository :; addProjectContainerDirectory(string projectDirPath) {
 	addProjectContainerDirectory(projectDirPath, set<string>());
 }
 
-void Projectrepository :: searchInSpecificProjects(vector<string> projects, vector<string> regex) {
+void Projectrepository :: searchInSpecificProjects(vector<string> projects, vector<string> searchRegexes) {
 	for(auto project = projects.begin(); project != projects.end(); project++) {
 		if(!projectPath.find(*project)) {
-			searcher->searchFor(regex)
+			searcher->searchFor()
 		}
 }
 }
