@@ -1,17 +1,12 @@
-#include "RegexTemplateSearcher.h"
+#include "RegesTemplateSearcher.h"
 #include <boost/regex.hpp>
 
 using namespace ProjSearch;
 
-RegexTemplate :: RegexTemplate(string regexTemplate) : regexTemplate(regexTemplate) {}
 
-string RegexTemplate :: applyAndGetRegex() {
-	for(map<string, string> :: iterator it = placeHolders.begin(); it != placeHolders.end(); it++) {
-		
-	} 
-}
+RegesTemplateSearcher :: RegesTemplateSearcher(string fPath) : filePath(fPath) {}
 
-vector<SearchResults> RegexTemplateSearcher :: searchFor(vector<string> regexes) {
+vector<SearchResults> RegesTemplateSearcher :: searchFor(char *data, vector<string> regexes) {
 	vector<SearchResults> searchResults;
   for_each(regexes.begin(), regexes.end(), [] (string regex) {
 		boost::regex expr{regex};
@@ -25,3 +20,6 @@ vector<SearchResults> RegexTemplateSearcher :: searchFor(vector<string> regexes)
   return searchResults;
 }
 
+vector<SearchResults> RegesTemplateSearcher :: searchFor(string filePath, vector<string> regexes) {
+	
+}
