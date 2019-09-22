@@ -32,3 +32,13 @@ void Searcher :: readFromPath(string filePath) {
 Searcher :: ~Searcher() {
 	delete[] pData;
 }
+
+void SearchResults :: setRowAndCol(string source, int offset, int &row, int &col) {
+	int count = 0, pPosition = 0;
+	for(int i = 0; i != string::npos; i = source.find(lineSeperator, i) ) {
+		pPosition = i;
+		count++;
+	}
+	col = offset - pPosition;
+	row = count;
+}

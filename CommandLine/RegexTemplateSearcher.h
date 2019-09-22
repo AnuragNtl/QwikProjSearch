@@ -3,25 +3,29 @@
 
 #include "Searcher.h"
 
+#define REGEX_TEMPLATE_WRAPPER_START "${"
+#define REGEX_TEMPLATE_WRAPPER_END "}"
+
 namespace ProjSearch {
 	struct RegexTemplate {
 
 	private:
 		map<string, string> placeHolders;
 	public:
+		string regexTemplate;
 		RegexTemplate(string);
 		string& operator[](string templateName) {
 				return placeHolders[templateName];
 		}
-		string regexTemplate;
 		string applyAndGetRegex();
 	};
 
-	class RegexTemplateSearcher : public Searcher {
+	class RegexTemplateSearcher : public RegexSearcher {
 	private:
+		map<string, RegexTemplate> regexTemplates;
 	public:
+		RegexTemplateSearcher(map<string, RegexTemplate>);
 		vector<SearchResults> searchFor(char *, vector<string>);
-		vector<SearchResults> searchFor(string filePath, vector<string>);
 	};
 };
 #endif

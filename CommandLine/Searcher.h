@@ -6,19 +6,26 @@
 
 using namespace std;
 
+#define DEFAULT_LINE_SEPERATOR "\n";
+
 namespace ProjSearch {
 	struct SearchResults {
-
 		SearchResults(string filePath, int row, int col, int, int);
+		SearchResults(int row, int col, int offset) : row(row), col(col) {
+			this->offset = offset;
+		}
 		string filePath;
 		int row, col;
 		int offset;
 		int fileType;
+		static string lineSeperator;
+		static void setRowAndCol(string source, int offset, int &row, int &col);
 	};
 
+	string SearchResults :: lineSeperator = DEFAULT_LINE_SEPERATOR;
+
+
 	class Searcher {
-	private:
-		void readFromPath(string filePath);
 	protected:
 		char *pData;
 	public:
