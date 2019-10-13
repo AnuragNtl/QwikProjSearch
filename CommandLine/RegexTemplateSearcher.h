@@ -6,6 +6,9 @@
 #define REGEX_TEMPLATE_WRAPPER_START "${"
 #define REGEX_TEMPLATE_WRAPPER_END "}"
 
+#define REGEX_TEMPLATE_SPEC_TEMPLATE_NAME "templateName"
+#define REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES "templateParams"
+
 namespace ProjSearch {
 	struct RegexTemplate {
 
@@ -19,6 +22,12 @@ namespace ProjSearch {
 		}
 		string applyAndGetRegex();
 	};
+
+  class RegexTemplateExtractor {
+    public:
+      virtual RegexTemplate extractFromString(string regexTemplateSpecifier);
+
+  };
 
 	class RegexTemplateSearcher : public RegexSearcher {
 	private:
