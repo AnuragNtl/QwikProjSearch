@@ -20,6 +20,12 @@ namespace ProjSearch {
 		string applyAndGetRegex();
 	};
 
+  class RegexTemplateExtractor {
+    public:
+      virtual RegexTemplate extractFromString(string regexTemplateSpecifier);
+
+  };
+
 	class RegexTemplateSearcher : public RegexSearcher {
 	private:
 		map<string, RegexTemplate> regexTemplates;

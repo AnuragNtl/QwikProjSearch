@@ -17,3 +17,11 @@ string RegexTemplate :: applyAndGetRegex() {
 	return tempRegexTemplate;
 }
 
+/*
+ * 
+ */
+vector<string> RegexTemplateSearcher :: searchFor(char *data, vector<string> regexTemplateSpecifiers) {
+  for_each(regexTemplateSpecifiers.begin(), regexTemplateSpecifiers.end(), [] (string regexTemplateSpecifier) {
+      });
+}
+
