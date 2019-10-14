@@ -23,9 +23,13 @@ namespace ProjSearch {
 		string applyAndGetRegex();
 	};
 
+  class RegexTemplateException : public std::exception {
+    public:
+      const char* what() const ;
+  };
   class RegexTemplateExtractor {
     public:
-      virtual RegexTemplate extractFromString(string regexTemplateSpecifier);
+     virtual RegexTemplate extractFromString(string regexTemplateSpecifier);
 
   };
 
