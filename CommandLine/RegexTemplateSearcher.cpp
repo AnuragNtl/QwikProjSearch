@@ -19,6 +19,10 @@ string RegexTemplate :: applyAndGetRegex() {
 	return tempRegexTemplate;
 }
 
+const char* RegexTemplateException :: what() const {
+  return "Wrong Regex Template";
+}
+
 /*
  * 
  */
@@ -38,8 +42,9 @@ vector<string> RegexTemplateSearcher :: searchFor(char *data, vector<string> reg
      }
      return regexTemplate;
      }
-   catch(boost::exception &e) { 
-   }  
+   catch(boost::exception &e) {
+    throw RegexTemplateException(); 
+   }
       });
 }
 
