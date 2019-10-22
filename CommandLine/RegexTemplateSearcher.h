@@ -2,6 +2,8 @@
 #define FILESYSTEM_SEARCHER_H
 
 #include "Searcher.h"
+#include <map>
+#include <set>
 
 #define REGEX_TEMPLATE_WRAPPER_START "${"
 #define REGEX_TEMPLATE_WRAPPER_END "}"
@@ -21,6 +23,8 @@ namespace ProjSearch {
 				return placeHolders[templateName];
 		}
 		string applyAndGetRegex();
+    string getName();
+    set<string> getPlaceHolderNames();
 	};
 
   class RegexTemplateException : public std::exception {

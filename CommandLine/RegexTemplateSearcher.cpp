@@ -19,6 +19,18 @@ string RegexTemplate :: applyAndGetRegex() {
 	return tempRegexTemplate;
 }
 
+string RegexTemplate :: getName() {
+  return regexTemplate;
+}
+
+set<string> RegexTemplate :: getPlaceHolderNames() {
+  set<string> placeHolderNames;
+  for(auto it = placeHolders.begin(); it != placeHolders.end(); it++) {
+    placeHolderNames.push_back(it->first);
+  }
+  return placeHolderNames;
+}
+
 const char* RegexTemplateException :: what() const {
   return "Wrong Regex Template";
 }

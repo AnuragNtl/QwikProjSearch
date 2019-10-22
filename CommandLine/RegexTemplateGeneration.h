@@ -10,7 +10,7 @@ namespace ProjSearch {
       map<string, string> regexTemplates;
     public:
       RegexTemplateGeneration(string source);
-      string generateSpec();
+      string generateSpec(RegexTemplate regexTemplate);
   };
   vector<string> split(string, string);
 };
