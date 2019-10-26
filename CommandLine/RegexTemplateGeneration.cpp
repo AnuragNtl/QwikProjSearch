@@ -20,10 +20,14 @@ RegexTemplateGeneration :: RegexTemplateGeneration(string source) {
 string RegexTemplateGeneration :: generateSpec(RegexTemplate regexTemplate) {
   ptree spec;
   ptree properties;
-  spec.put(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME, regexTemplate. regexTemplate.getName());
-  
+  spec.put(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME, regexTemplate. regexTemplate.getName());  
+ set<string> propertyNames = regexTemplate.getPlaceHolderNames();
+for(auto it = propertyNames.begin(); it != propertyNames.end(); it++) {
+  properties.put(*it, regexTemplate[*it]);
+}
+spec.put(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES, properties);
   ostringstream buf;
-  spec.put(buf, spec, false);
+  write_json(buf, spec, false);
   return spec.str();
 }
 
