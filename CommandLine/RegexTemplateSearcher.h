@@ -18,7 +18,8 @@ namespace ProjSearch {
 		map<string, string> placeHolders;
 	public:
 		string regexTemplate;
-		RegexTemplate(string);
+    string regexTemplateName;
+		RegexTemplate(string, string);
 		string& operator[](string templateName) {
 				return placeHolders[templateName];
 		}
@@ -44,6 +45,7 @@ namespace ProjSearch {
 		RegexTemplateSearcher(map<string, RegexTemplate>);
 		vector<SearchResults> searchFor(char *, vector<string>);
 	};
+  vector<string> split(string, string);
 };
 #endif
 

@@ -10,8 +10,19 @@
 #include "RegexTemplateGeneration.h"
 #include <iostream>
 
+using namespace ProjSearch; 
+
+
 int main() {
-return 0;
+  string templateName;
+  cout << "Enter template Name:\n";
+  cin >> templateName;
+  RegexTemplateGeneration regexTemplateGeneration("RegexTemplates.conf");
+RegexTemplate regexTemplate;
+regexTemplateGeneration.getSpecByName(templateName);
+set<string> propertyNames = regexTemplate.getPropertyNames();
+  cout <<"Enter template properties : \n";
+  return 0;
 }
 
 

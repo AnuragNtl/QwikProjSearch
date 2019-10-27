@@ -2,11 +2,17 @@
 #include <algorithm>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/regex.hpp>
 
 using namespace ProjSearch;
 using namespace boost::property_tree;
 
-RegexTemplate :: RegexTemplate(string regexTemplate) : regexTemplate(regexTemplate) {}
+RegexTemplate :: RegexTemplate(string regexTemplate, string regexTemplateName) : regexTemplate(regexTemplate), regexTemplateName(regexTemplateName) {
+  boost::regex expr{REGEX_TEMPLATE_WRAPPER_START + string(".*?") + REGEX_TEMPLATE_WRAPPER_END};
+  boost::smatch what;
+  boost::regex_search(regexTemplate, what, expr);
+
+}
 
 string RegexTemplate :: applyAndGetRegex() {
 	string tempRegexTemplate = regexTemplate;
@@ -20,7 +26,7 @@ string RegexTemplate :: applyAndGetRegex() {
 }
 
 string RegexTemplate :: getName() {
-  return regexTemplate;
+  return regexTemplateName;
 }
 
 set<string> RegexTemplate :: getPlaceHolderNames() {
@@ -58,5 +64,25 @@ vector<string> RegexTemplateSearcher :: searchFor(char *data, vector<string> reg
     throw RegexTemplateException(); 
    }
       });
+}
+
+
+vector<string, string> split(string toSplit, string delim) {
+  istringstream input(toSplit);
+  vector<string> output;
+  while(!input.eof()) {
+    string token;
+    getline(token, delim);
+    output.push_back(token);
+  }
+  input.close();
+  return output;
+}
+
+RegexTemplate RegexTemplateExtractor :: extractFromString(string regexTemplateSpecifier) {
+  vector<string> spec = split(regexTemplateSpecifier, " ");
+  string regexTemplateName = spec[0];
+  string regexTemplateSpec = spec[1];
+  RegexTemplate regexTemplate(regexTemplateSpec, regexTemplateName);
 }
 

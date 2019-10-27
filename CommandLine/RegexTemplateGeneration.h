@@ -11,7 +11,7 @@ namespace ProjSearch {
     public:
       RegexTemplateGeneration(string source);
       string generateSpec(RegexTemplate regexTemplate);
+      string getSpecByName(string);
   };
-  vector<string> split(string, string);
 };
 
