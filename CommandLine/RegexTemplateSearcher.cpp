@@ -50,31 +50,31 @@ const char* RegexTemplateException :: what() const throw() {
  * 
  */
 vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> regexTemplateSpecifiers) {
-  vector<RegexTemplate> regexTemplateList;
-  regexTemplateList.resize(regexTemplateSpecifiers.size());
-  transform(regexTemplateSpecifiers.begin(), regexTemplateSpecifiers.end(), regexTemplateList.begin(), [] (string regexTemplateSpecifier) {
+  vector<string> regexList;
+  regexList.resize(regexTemplateSpecifiers.size());
+  transform(regexTemplateSpecifiers.begin(), regexTemplateSpecifiers.end(), regexList.begin(), [&data, this] (string regexTemplateSpecifier) {
      ptree regexTemplateSpecification;
      istringstream input(regexTemplateSpecifier);
       try {
      read_json(input, regexTemplateSpecification);
-     string templateName = regexTemplateSpecification.get_child<string>(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME);
+     string templateName = regexTemplateSpecification.get_child(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME).get_value<string>();
      ptree templateProperties = regexTemplateSpecification.get_child(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES);
-	strcpy(data, fileData.c_str());
-     RegexTemplate regexTemplate(templateName);
+   RegexTemplate regexTemplate = regexTemplates[templateName];  
      for(ptree :: iterator it = templateProperties.begin(); it != templateProperties.end(); it++) {
-      regexTemplate[it->first] = templateProperties.get_child<string>(it->first);
+      regexTemplate[it->first] = templateProperties.get_child(it->first).get_value<string>();
      }
-     return regexTemplate;
+     return regexTemplate.applyAndGetRegex();
      }
    catch(boost::exception &e) {
     throw RegexTemplateException(); 
    }
       });
-  return regexTemplateList;
+  return RegexSearcher :: searchFor(data, regexList);
 }
 
 
-vector<string> split(string toSplit, string delim) {
+namespace ProjSearch {
+  vector<string> splitString(string toSplit, string delim) {
   istringstream input(toSplit);
   vector<string> output;
   while(!input.eof()) {
@@ -84,21 +84,22 @@ vector<string> split(string toSplit, string delim) {
   }
   return output;
 }
+}
 
 RegexTemplate RegexTemplateExtractor :: extractFromString(string regexTemplateSpecifier) {
-  vector<string> spec = split(regexTemplateSpecifier, " ");
+  vector<string> spec = splitString(regexTemplateSpecifier, " ");
   string regexTemplateName = spec[0];
   string regexTemplateSpec = spec[1];
   RegexTemplate regexTemplate(regexTemplateSpec, regexTemplateName);
 }
 
 
-map<string, RegexTemplate> loadRegexTemplates(string source) {
+map<string, RegexTemplate> ProjSearch :: loadRegexTemplates(string source) {
   map<string, RegexTemplate> regexTemplateMap;
-  vector<string> specs = split(source, "\n");
+  vector<string> specs = ProjSearch::splitString(source, "\n");
     for(vector<string> :: iterator it = specs.begin(); it != specs.end(); it++) {
     string regexTemplateName, regexTemplateSpec;
-    vector<string> spec = ProjSearch::split(*it, string(" "));
+    vector<string> spec = ProjSearch::splitString(*it, string(" "));
     regexTemplateName = spec[0];
     regexTemplateSpec = spec[1];
     RegexTemplate regexTemplate(regexTemplateSpec, regexTemplateName);

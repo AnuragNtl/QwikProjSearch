@@ -30,6 +30,7 @@ void SearchResults :: setRowAndCol(string source, int offset, int &row, int &col
 	row = count;
 }
 
+namespace ProjSearch {
 string replace(string inString, string oldValue, string newValue) {
   int findIndex = 0;
   int len = oldValue.size();
@@ -41,4 +42,11 @@ string replace(string inString, string oldValue, string newValue) {
   } while(findIndex != string::npos);
   return inString;
 }
+}
+
+
+string SearchResults :: lineSeperator = DEFAULT_LINE_SEPERATOR;
+
+
+Searcher :: ~Searcher() {}
 

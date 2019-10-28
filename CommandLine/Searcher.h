@@ -23,7 +23,6 @@ namespace ProjSearch {
     string match;
 	};
 
-	string SearchResults :: lineSeperator = DEFAULT_LINE_SEPERATOR;
 
 
 	class Searcher {

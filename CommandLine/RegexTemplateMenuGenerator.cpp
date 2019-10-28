@@ -26,7 +26,7 @@ set<string> propertyNames = regexTemplate.getPlaceHolderNames();
     cout << *it <<" : ";
     cin >> regexTemplate[*it];
 }
-  cout << regexTemplate.generateSpec(regexTemplate) <<endl;
+  cout << regexTemplateGeneration.generateSpec(regexTemplate) <<endl;
   return 0;
 }
 
