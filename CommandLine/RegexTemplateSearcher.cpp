@@ -2,16 +2,21 @@
 #include <algorithm>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/regex.hpp>
+#include <vector>
+#include <cstring>
 
 using namespace ProjSearch;
 using namespace boost::property_tree;
+using namespace std;
 
 RegexTemplate :: RegexTemplate(string regexTemplate, string regexTemplateName) : regexTemplate(regexTemplate), regexTemplateName(regexTemplateName) {
-  boost::regex expr{REGEX_TEMPLATE_WRAPPER_START + string(".*?") + REGEX_TEMPLATE_WRAPPER_END};
-  boost::smatch what;
-  boost::regex_search(regexTemplate, what, expr);
-
+  vector<string> regex = {REGEX_TEMPLATE_WRAPPER_START + regexTemplate + REGEX_TEMPLATE_WRAPPER_END};
+  RegexSearcher regexSearcher;
+  vector<SearchResults> searchResults = regexSearcher.searchFor(regexTemplate.c_str(), regex);
+  for(int i = 0; i < searchResults.size(); i++) {
+   string match = searchResults[i].match;
+   placeHolders[match] = string(""); 
+  }
 }
 
 string RegexTemplate :: applyAndGetRegex() {
@@ -20,7 +25,7 @@ string RegexTemplate :: applyAndGetRegex() {
     string replaceValue = it->first;
     string toReplaceWith = it->second;
     toReplaceWith = REGEX_TEMPLATE_WRAPPER_START + toReplaceWith + REGEX_TEMPLATE_WRAPPER_END;
-    replace(tempRegexTemplate.start(), tempRegexTemplate.end(), replaceValue, toReplaceWith);
+    tempRegexTemplate = replace(tempRegexTemplate, replaceValue, toReplaceWith);
 	}
 	return tempRegexTemplate;
 }
@@ -32,19 +37,19 @@ string RegexTemplate :: getName() {
 set<string> RegexTemplate :: getPlaceHolderNames() {
   set<string> placeHolderNames;
   for(auto it = placeHolders.begin(); it != placeHolders.end(); it++) {
-    placeHolderNames.push_back(it->first);
+    placeHolderNames.insert(it->first);
   }
   return placeHolderNames;
 }
 
-const char* RegexTemplateException :: what() const {
+const char* RegexTemplateException :: what() const throw() {
   return "Wrong Regex Template";
 }
 
 /*
  * 
  */
-vector<string> RegexTemplateSearcher :: searchFor(char *data, vector<string> regexTemplateSpecifiers) {
+vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> regexTemplateSpecifiers) {
   vector<RegexTemplate> regexTemplateList;
   regexTemplateList.resize(regexTemplateSpecifiers.size());
   transform(regexTemplateSpecifiers.begin(), regexTemplateSpecifiers.end(), regexTemplateList.begin(), [] (string regexTemplateSpecifier) {
@@ -53,7 +58,8 @@ vector<string> RegexTemplateSearcher :: searchFor(char *data, vector<string> reg
       try {
      read_json(input, regexTemplateSpecification);
      string templateName = regexTemplateSpecification.get_child<string>(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME);
-     string templateProperties = regexTemplateSpecification.get_child<string>(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES);
+     ptree templateProperties = regexTemplateSpecification.get_child(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES);
+	strcpy(data, fileData.c_str());
      RegexTemplate regexTemplate(templateName);
      for(ptree :: iterator it = templateProperties.begin(); it != templateProperties.end(); it++) {
       regexTemplate[it->first] = templateProperties.get_child<string>(it->first);
@@ -64,18 +70,18 @@ vector<string> RegexTemplateSearcher :: searchFor(char *data, vector<string> reg
     throw RegexTemplateException(); 
    }
       });
+  return regexTemplateList;
 }
 
 
-vector<string, string> split(string toSplit, string delim) {
+vector<string> split(string toSplit, string delim) {
   istringstream input(toSplit);
   vector<string> output;
   while(!input.eof()) {
     string token;
-    getline(token, delim);
+    getline(input, token, delim.c_str()[0]);
     output.push_back(token);
   }
-  input.close();
   return output;
 }
 
@@ -85,4 +91,20 @@ RegexTemplate RegexTemplateExtractor :: extractFromString(string regexTemplateSp
   string regexTemplateSpec = spec[1];
   RegexTemplate regexTemplate(regexTemplateSpec, regexTemplateName);
 }
+
+
+map<string, RegexTemplate> loadRegexTemplates(string source) {
+  map<string, RegexTemplate> regexTemplateMap;
+  vector<string> specs = split(source, "\n");
+    for(vector<string> :: iterator it = specs.begin(); it != specs.end(); it++) {
+    string regexTemplateName, regexTemplateSpec;
+    vector<string> spec = ProjSearch::split(*it, string(" "));
+    regexTemplateName = spec[0];
+    regexTemplateSpec = spec[1];
+    RegexTemplate regexTemplate(regexTemplateSpec, regexTemplateName);
+    regexTemplateMap[regexTemplateName] = regexTemplate;
+  }
+    return regexTemplateMap;
+}
+
 

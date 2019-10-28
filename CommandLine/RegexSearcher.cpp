@@ -3,16 +3,18 @@
 
 using namespace ProjSearch;
 
-vector<SearchResults> RegexSearcher :: searchFor(vector<string> regexes) {
+vector<SearchResults> RegexSearcher :: searchFor(const char *rawData, const vector<string> regexes) {
 	vector<SearchResults> searchResults;
-  for_each(regexes.begin(), regexes.end(), [] (string regex) {
+  string filePath = this->filePath;
+  for_each(regexes.begin(), regexes.end(), [filePath, rawData, &searchResults] (string regex) {
 		boost::regex expr{regex};
-		boost::smatch matches;
-    if(boost::regex_search(data, matches, expr)) {
-    for(auto it = matches.begin(); it != matches.end(); it++) {
-      searchResults.insert(SearchResults(filePath, 0 , 0, *it-pData, 0));
+    string data = rawData;
+    boost::sregex_iterator itBegin(data.begin(), data.end(), expr), itEnd;
+    for(boost::sregex_iterator it = itBegin; it != itEnd; it++) {
+    SearchResults searchResult(filePath, 0, 0, it->position(), 0);
+    searchResult.match = it->str();
     }
-		}
 	});
   return searchResults;
 }
+

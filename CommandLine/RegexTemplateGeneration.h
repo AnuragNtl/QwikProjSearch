@@ -7,10 +7,11 @@ using namespace std;
 namespace ProjSearch {
   class RegexTemplateGeneration {
     private:
-      map<string, string> regexTemplates;
+      map<string, RegexTemplate> regexTemplates;
     public:
       RegexTemplateGeneration(string source);
       string generateSpec(RegexTemplate regexTemplate);
+      RegexTemplate getRegexTemplateByName(string);
       string getSpecByName(string);
   };
 };

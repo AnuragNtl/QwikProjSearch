@@ -4,7 +4,7 @@ using namespace ProjSearch;
 
 using namespace std;
 
-vector<SearchResults> PlainSearcher :: searchFor(char *rawData, vector<string> toSearch) {
+vector<SearchResults> PlainSearcher :: searchFor(const char *rawData, const vector<string> toSearch) {
 	string data = rawData;
 	vector<SearchResults> searchResults;
 	int indx = 0;

@@ -1,7 +1,7 @@
 #ifndef FILESYSTEM_SEARCHER_H
 #define FILESYSTEM_SEARCHER_H
 
-#include "Searcher.h"
+#include "RegexSearcher.h"
 #include <map>
 #include <set>
 
@@ -30,7 +30,7 @@ namespace ProjSearch {
 
   class RegexTemplateException : public std::exception {
     public:
-      const char* what() const ;
+      const char* what() const throw() ;
   };
   class RegexTemplateExtractor {
     public:
@@ -43,9 +43,10 @@ namespace ProjSearch {
 		map<string, RegexTemplate> regexTemplates;
 	public:
 		RegexTemplateSearcher(map<string, RegexTemplate>);
-		vector<SearchResults> searchFor(char *, vector<string>);
+		vector<SearchResults> searchFor(const char *, const vector<string>);
 	};
   vector<string> split(string, string);
+  map<string, RegexTemplate> loadRegexTemplates(string);
 };
 #endif
 

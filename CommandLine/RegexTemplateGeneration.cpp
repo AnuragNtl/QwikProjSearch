@@ -8,20 +8,14 @@ using namespace boost::property_tree;
 
 
 RegexTemplateGeneration :: RegexTemplateGeneration(string source) {
-  vector<string> specs = split(source, "\n");
-    for(vector<string> :: iterator it = specs.begin(); it != specs.end(); it++)
-    string regexTemplateName, regexTemplateSpec;
-    vector<string> spec = it->split(" ");
-    regexTemplateName = spec[0];
-    regexTemplateSpec = spec[1];
-    regexTemplates[regexTemplateName] = regexTemplateSpec;
+  regexTemplates = loadRegexTemplates(source);
   }
-  source.close();
 }
 
-string RegexTemplateGeneration :: generateSpec(RegexTemplate regexTemplate) {
+string RegexTemplateGeneration :: generateSpec(string regexTemplateName) {
   ptree spec;
   ptree properties;
+  RegexTemplate regexTemplate = regexTemplates[regexTemplateName]; 
   spec.put(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME, regexTemplate.getName());  
  set<string> propertyNames = regexTemplate.getPlaceHolderNames();
 for(auto it = propertyNames.begin(); it != propertyNames.end(); it++) {

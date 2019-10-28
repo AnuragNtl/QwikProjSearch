@@ -6,7 +6,7 @@
 namespace ProjSearch {
 	class RegexSearcher : public Searcher {
 	public:
-		virtual vector<SearchResults> searchFor(char *data, vector<string> regexes);
+		virtual vector<SearchResults> searchFor(const char *data, const vector<string> regexes);
 	};
 };
 

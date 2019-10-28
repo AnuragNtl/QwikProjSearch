@@ -20,18 +20,21 @@ namespace ProjSearch {
 		int fileType;
 		static string lineSeperator;
 		static void setRowAndCol(string source, int offset, int &row, int &col);
+    string match;
 	};
 
 	string SearchResults :: lineSeperator = DEFAULT_LINE_SEPERATOR;
 
 
 	class Searcher {
-	protected:
-		char *pData;
+    protected:
+      string filePath;
 	public:
-		virtual vector<SearchResults> searchFor(char *data, vector<string>) { return vector<SearchResults>();}
+		virtual vector<SearchResults> searchFor(const char *data, const vector<string>) { return vector<SearchResults>();}
+    void readFromPath(string);
 		~Searcher();
 	};
+  string replace(string, string, string);
 };
 
 

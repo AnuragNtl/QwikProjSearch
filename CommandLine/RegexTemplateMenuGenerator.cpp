@@ -18,10 +18,15 @@ int main() {
   cout << "Enter template Name:\n";
   cin >> templateName;
   RegexTemplateGeneration regexTemplateGeneration("RegexTemplates.conf");
-RegexTemplate regexTemplate;
-regexTemplateGeneration.getSpecByName(templateName);
-set<string> propertyNames = regexTemplate.getPropertyNames();
+string spec = regexTemplateGeneration.getSpecByName(templateName);
+RegexTemplate regexTemplate(spec, templateName);
+set<string> propertyNames = regexTemplate.getPlaceHolderNames();
   cout <<"Enter template properties : \n";
+  for(auto it = propertyNames.begin(); it != propertyNames.end(); it++) {
+    cout << *it <<" : ";
+    cin >> regexTemplate[*it];
+}
+  cout << regexTemplate.generateSpec(regexTemplate) <<endl;
   return 0;
 }
 

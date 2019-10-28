@@ -1,18 +1,13 @@
 #include "Searcher.h"
+#include <fstream>
 
 using namespace ProjSearch;
+using namespace std;
 
 SearchResults :: SearchResults(string filePath, int row, int col, int offset, int fType) : filePath(filePath), row(row), col(col), offset(offset), fileType(fType) {}
 
-Searcher :: Searcher(char *data) {
-	this->pData = data;	
-}
-
-Searcher :: Searcher(string filePath) : data(NULL) {
-	readFromPath(filePath);
-}
-
 void Searcher :: readFromPath(string filePath) {
+  this->filePath = filePath;
 	ifstream in(filePath.c_str());
 	string fileData = "";
 	char *buffer = new char[1024];
@@ -22,16 +17,8 @@ void Searcher :: readFromPath(string filePath) {
 		buffer[readCount] = '\0';
 		fileData = fileData + buffer;
 	}
-	if(data != NULL) {
-		delete[] data;
-	}
-	data = new char[fileData.size() + 1];
-	strcpy(data, fileData.c_str());
 }
 
-Searcher :: ~Searcher() {
-	delete[] pData;
-}
 
 void SearchResults :: setRowAndCol(string source, int offset, int &row, int &col) {
 	int count = 0, pPosition = 0;
@@ -42,3 +29,16 @@ void SearchResults :: setRowAndCol(string source, int offset, int &row, int &col
 	col = offset - pPosition;
 	row = count;
 }
+
+string replace(string inString, string oldValue, string newValue) {
+  int findIndex = 0;
+  int len = oldValue.size();
+  do {
+    findIndex = inString.find(oldValue, findIndex + 1);
+    if(findIndex != string::npos) {
+      inString.replace(findIndex, len, newValue);
+    }
+  } while(findIndex != string::npos);
+  return inString;
+}
+
