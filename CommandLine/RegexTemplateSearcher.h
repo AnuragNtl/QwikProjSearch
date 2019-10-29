@@ -7,9 +7,11 @@
 
 #define REGEX_TEMPLATE_WRAPPER_START "${"
 #define REGEX_TEMPLATE_WRAPPER_END "}"
+#define REGEX_TEMPLATE_WRAPPER_FIND_REGEX "\\$\\{.+?\\}"
 
 #define REGEX_TEMPLATE_SPEC_TEMPLATE_NAME "templateName"
 #define REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES "templateParams"
+
 
 namespace ProjSearch {
 	struct RegexTemplate {
@@ -43,7 +45,7 @@ namespace ProjSearch {
 	private:
 		map<string, RegexTemplate> regexTemplates;
 	public:
-    vector<SearchResults> searchFor(const char *, const vector<string>);
+    vector<SearchResults> searchFor(const char *, const vector<string> &);
 	};
   vector<string> splitString(string, string);
   map<string, RegexTemplate> loadRegexTemplates(string);

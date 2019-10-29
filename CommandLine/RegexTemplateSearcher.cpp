@@ -10,7 +10,7 @@ using namespace boost::property_tree;
 using namespace std;
 
 RegexTemplate :: RegexTemplate(string regexTemplate, string regexTemplateName) : regexTemplate(regexTemplate), regexTemplateName(regexTemplateName) {
-  vector<string> regex = {REGEX_TEMPLATE_WRAPPER_START + regexTemplate + REGEX_TEMPLATE_WRAPPER_END};
+  vector<string> regex = {REGEX_TEMPLATE_WRAPPER_FIND_REGEX};
   RegexSearcher regexSearcher;
   vector<SearchResults> searchResults = regexSearcher.searchFor(regexTemplate.c_str(), regex);
   for(int i = 0; i < searchResults.size(); i++) {
@@ -49,7 +49,7 @@ const char* RegexTemplateException :: what() const throw() {
 /*
  * 
  */
-vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> regexTemplateSpecifiers) {
+vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> &regexTemplateSpecifiers) {
   vector<string> regexList;
   regexList.resize(regexTemplateSpecifiers.size());
   transform(regexTemplateSpecifiers.begin(), regexTemplateSpecifiers.end(), regexList.begin(), [&data, this] (string regexTemplateSpecifier) {

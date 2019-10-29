@@ -26,6 +26,6 @@ spec.add_child(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES, properties);
 }
 
 string RegexTemplateGeneration :: getSpecByName(string name) {
-return regexTemplates[name].regexTemplateName;
+return regexTemplates[name].regexTemplate;
 }
 
