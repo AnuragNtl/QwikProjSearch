@@ -45,7 +45,7 @@ namespace ProjSearch {
 	private:
 		map<string, RegexTemplate> regexTemplates;
 	public:
-    vector<SearchResults> searchFor(const char *, const vector<string> &);
+    vector<SearchResults> searchFor(const char *, const vector<string>);
 	};
   vector<string> splitString(string, string);
   map<string, RegexTemplate> loadRegexTemplates(string);

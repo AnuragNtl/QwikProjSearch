@@ -3,7 +3,7 @@
 
 using namespace ProjSearch;
 
-vector<SearchResults> RegexSearcher :: searchFor(const char *rawData, const vector<string> &regexes) {
+vector<SearchResults> RegexSearcher :: searchFor(const char *rawData, const vector<string> regexes) {
 	vector<SearchResults> searchResults;
   string filePath = this->filePath;
   for_each(regexes.begin(), regexes.end(), [filePath, rawData, &searchResults] (string regex) {

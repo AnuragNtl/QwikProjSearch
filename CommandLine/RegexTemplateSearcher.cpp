@@ -49,7 +49,7 @@ const char* RegexTemplateException :: what() const throw() {
 /*
  * 
  */
-vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> &regexTemplateSpecifiers) {
+vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> regexTemplateSpecifiers) {
   vector<string> regexList;
   regexList.resize(regexTemplateSpecifiers.size());
   transform(regexTemplateSpecifiers.begin(), regexTemplateSpecifiers.end(), regexList.begin(), [&data, this] (string regexTemplateSpecifier) {

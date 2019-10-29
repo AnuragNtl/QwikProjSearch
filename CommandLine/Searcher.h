@@ -29,7 +29,7 @@ namespace ProjSearch {
     protected:
       string filePath;
 	public:
-		virtual vector<SearchResults> searchFor(const char *data, const vector<string> &) { return vector<SearchResults>();}
+		virtual vector<SearchResults> searchFor(const char *data, const vector<string>) { return vector<SearchResults>();}
     void readFromPath(string);
 		~Searcher();
 	};
