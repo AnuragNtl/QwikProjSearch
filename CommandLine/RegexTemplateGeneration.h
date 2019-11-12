@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <set>
+#include <vector>
 #include "RegexTemplateSearcher.h"
 
 using namespace std;
@@ -13,6 +15,8 @@ namespace ProjSearch {
       string generateSpec(RegexTemplate);
       RegexTemplate getRegexTemplateByName(string);
       string getSpecByName(string);
+      set<string>  getRegexTemplateNames();
+      vector<RegexTemplate> getRegexTemplates();
   };
 };
 
