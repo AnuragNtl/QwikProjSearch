@@ -91,6 +91,7 @@ RegexTemplate RegexTemplateExtractor :: extractFromString(string regexTemplateSp
   string regexTemplateName = spec[0];
   string regexTemplateSpec = spec[1];
   RegexTemplate regexTemplate(regexTemplateSpec, regexTemplateName);
+  return regexTemplate;
 }
 
 
@@ -108,4 +109,19 @@ map<string, RegexTemplate> ProjSearch :: loadRegexTemplates(string source) {
     return regexTemplateMap;
 }
 
+set<string> RegexTemplateSearcher :: getAllRegexTemplateNames() {
+  set<string> regexTemplateNames;
+  for(auto it = regexTemplates.begin(); it != regexTemplates.end(); it++) {
+    regexTemplateNames.insert(it->first);
+  }
+  return regexTemplateNames;
+}
+
+vector<RegexTemplate> RegexTemplateSearcher :: getAllRegexTemplates() {
+  vector<RegexTemplate> regexTemplateList;
+  for(auto it = regexTemplates.begin(); it != regexTemplates.end(); it++) {
+    regexTemplateList.push_back(it->second);
+  }
+  return regexTemplateList;
+}
 
