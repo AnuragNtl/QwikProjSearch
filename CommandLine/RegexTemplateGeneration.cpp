@@ -29,3 +29,19 @@ string RegexTemplateGeneration :: getSpecByName(string name) {
 return regexTemplates[name].regexTemplate;
 }
 
+set<string> RegexTemplateGeneration :: getRegexTemplateNames() {
+  set<string> regexTemplateNames;
+  for_each(regexTemplates.begin(), regexTemplates.end(), [&regexTemplateNames](pair<string, RegexTemplate> regexTemplatePair) {
+      regexTemplateNames.insert(regexTemplatePair.first);
+      });
+  return regexTemplateNames;
+}
+
+vector<RegexTemplate> RegexTemplateGeneration :: getRegexTemplates() {
+  vector<RegexTemplate> regexTemplateList;
+  for_each(regexTemplates.begin(), regexTemplates.end(), [&regexTemplateList](pair<string, RegexTemplate> regexTemplatePair) {
+    regexTemplateList.push_back(regexTemplatePair.second);    
+      });
+  return regexTemplateList;
+}
+

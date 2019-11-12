@@ -29,11 +29,16 @@ string getContents(string fileName) {
 }
 
 int main() {
-  string templateName;
-  cout << "Enter template Name:\n";
-  cin >> templateName;
   RegexTemplateGeneration regexTemplateGeneration(getContents("RegexTemplates.conf"));
-string spec = regexTemplateGeneration.getSpecByName(templateName);
+  set<string> regexTemplateNames = regexTemplateGeneration.getRegexTemplateNames();
+  cout <<"Choose regex template\n";
+ string templateName;
+ int exitChoice = regexTemplateNames.size() + 1;
+ int choice = exitChoice;
+ do {
+   for(int i = 0; i < regexTemplateNames.begin();
+ } while(choice != exitChoice);
+  string spec = regexTemplateGeneration.getSpecByName(templateName);
 RegexTemplate regexTemplate(spec, templateName);
 set<string> propertyNames = regexTemplate.getPlaceHolderNames();
   cout <<"Enter template properties : \n";
