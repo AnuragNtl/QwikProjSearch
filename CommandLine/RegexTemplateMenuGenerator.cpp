@@ -35,9 +35,23 @@ int main() {
  string templateName;
  int exitChoice = regexTemplateNames.size() + 1;
  int choice = exitChoice;
- do {
-   for(int i = 0; i < regexTemplateNames.begin();
+  do {
+   int i = 0;
+   vector<string> regexTemplateNamesList(regexTemplateNames.size());
+   for(auto it = regexTemplateNames.begin(); it != regexTemplateNames.end()  ; i++, it++) {
+     cout << (i+1) << "." << *it <<endl;
+     regexTemplateNamesList[i] = *it;
+   }
+   cout << (i+1) << ".Exit\n";
+  cin >> choice;
+  if(choice > 0 && choice <= regexTemplateNamesList.size()) {
+  templateName = regexTemplateNamesList[choice - 1];
+  break;
+  }
  } while(choice != exitChoice);
+ if(choice == exitChoice) {
+   return 0;
+ }
   string spec = regexTemplateGeneration.getSpecByName(templateName);
 RegexTemplate regexTemplate(spec, templateName);
 set<string> propertyNames = regexTemplate.getPlaceHolderNames();
