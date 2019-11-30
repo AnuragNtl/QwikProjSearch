@@ -11,7 +11,9 @@ RegexTemplateGeneration :: RegexTemplateGeneration(string source) {
   regexTemplates = loadRegexTemplates(source);
 }
 
-string RegexTemplateGeneration :: generateSpec(RegexTemplate regexTemplate) {
+string RegexTemplateGeneration :: generateSpec(vector<RegexTemplate> regexTemplateList) {
+  ptree specList;
+  for_each(regexTemplateList.begin(), regexTemplateList.end(), [&specList] (RegexTemplate regexTemplate) {    
   ptree spec;
   ptree properties;
   spec.put(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME, regexTemplate.getName());  
@@ -20,8 +22,10 @@ for(auto it = propertyNames.begin(); it != propertyNames.end(); it++) {
   properties.put(*it, regexTemplate[*it]);
 }
 spec.add_child(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES, properties);
+specList.push_back(spec);
+      });
   ostringstream buf;
-  write_json(buf, spec, false);
+  write_json(buf, specList, false);
   return buf.str();
 }
 

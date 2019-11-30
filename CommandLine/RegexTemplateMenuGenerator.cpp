@@ -31,7 +31,7 @@ string getContents(string fileName) {
 int main() {
   RegexTemplateGeneration regexTemplateGeneration(getContents("RegexTemplates.conf"));
   set<string> regexTemplateNames = regexTemplateGeneration.getRegexTemplateNames();
-  cout <<"Choose regex template\n";
+  cerr <<"Choose regex template\n";
  string templateName;
  int exitChoice = regexTemplateNames.size() + 1;
  int choice = exitChoice;
@@ -39,10 +39,10 @@ int main() {
    int i = 0;
    vector<string> regexTemplateNamesList(regexTemplateNames.size());
    for(auto it = regexTemplateNames.begin(); it != regexTemplateNames.end()  ; i++, it++) {
-     cout << (i+1) << "." << *it <<endl;
+     cerr << (i+1) << "." << *it <<endl;
      regexTemplateNamesList[i] = *it;
    }
-   cout << (i+1) << ".Exit\n";
+   cerr << (i+1) << ".Exit\n";
   cin >> choice;
   if(choice > 0 && choice <= regexTemplateNamesList.size()) {
   templateName = regexTemplateNamesList[choice - 1];
@@ -55,9 +55,9 @@ int main() {
   string spec = regexTemplateGeneration.getSpecByName(templateName);
 RegexTemplate regexTemplate(spec, templateName);
 set<string> propertyNames = regexTemplate.getPlaceHolderNames();
-  cout <<"Enter template properties : \n";
+  cerr <<"Enter template properties : \n";
   for(auto it = propertyNames.begin(); it != propertyNames.end(); it++) {
-    cout << *it <<" : ";
+    cerr << *it <<" : ";
     cin >> regexTemplate[*it];
 }
   cout << regexTemplateGeneration.generateSpec(regexTemplate) <<endl;
