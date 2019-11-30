@@ -46,12 +46,7 @@ int main() {
   cin >> choice;
   if(choice > 0 && choice <= regexTemplateNamesList.size()) {
   templateName = regexTemplateNamesList[choice - 1];
-  break;
-  }
- } while(choice != exitChoice);
- if(choice == exitChoice) {
-   return 0;
- }
+  
   string spec = regexTemplateGeneration.getSpecByName(templateName);
 RegexTemplate regexTemplate(spec, templateName);
 set<string> propertyNames = regexTemplate.getPlaceHolderNames();
@@ -60,6 +55,11 @@ set<string> propertyNames = regexTemplate.getPlaceHolderNames();
     cerr << *it <<" : ";
     cin >> regexTemplate[*it];
 }
+  }
+ } while(choice != exitChoice);
+ if(choice == exitChoice) {
+   return 0;
+ }
   cout << regexTemplateGeneration.generateSpec(regexTemplate) <<endl;
   return 0;
 }
