@@ -10,7 +10,7 @@ ProjectListFilter :: ProjectListFilter(ProjectRepository *ProjectRepository, set
 ProjectListFilter :: ProjectListFilter(ProjectRepository *projectRepository) : projectRepository(projectRepository) {}
 
 bool ProjectListFilter :: operator()(string directory) {
-	return projectRepository->io->isDirectory(directory) && excludedDirectories.find(directory) != excludedDirectories.end();
+ return excludedDirectories.find(directory) != excludedDirectories.end() || projectRepository->io->isFile();
 }
 
 ProjectRepository :: ProjectRepository(Io *io, Searcher *s) : io(io), searcher(s) {}

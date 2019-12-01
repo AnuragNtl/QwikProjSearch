@@ -36,6 +36,12 @@ namespace ProjSearch {
     ProjectListFilter(ProjectRepository *, set<string>);
     bool operator()(string directory);
   };
+
+  class DirectorySearcher {
+    public:
+      DirectorySearcher(string directory);
+      vector<string> getMatchingFiles(vector<string> regexes);
+  };
 };
 
 #endif

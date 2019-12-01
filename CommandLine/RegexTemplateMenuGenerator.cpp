@@ -31,6 +31,7 @@ string getContents(string fileName) {
 int main() {
   RegexTemplateGeneration regexTemplateGeneration(getContents("RegexTemplates.conf"));
   set<string> regexTemplateNames = regexTemplateGeneration.getRegexTemplateNames();
+  vector<RegexTemplate> regexTemplateGenerationList;
   cerr <<"Choose regex template\n";
  string templateName;
  int exitChoice = regexTemplateNames.size() + 1;
@@ -55,12 +56,10 @@ set<string> propertyNames = regexTemplate.getPlaceHolderNames();
     cerr << *it <<" : ";
     cin >> regexTemplate[*it];
 }
+regexTemplateGenerationList.push_back(regexTemplate);
   }
  } while(choice != exitChoice);
- if(choice == exitChoice) {
-   return 0;
- }
-  cout << regexTemplateGeneration.generateSpec(regexTemplate) <<endl;
+  cout << regexTemplateGeneration.generateSpec(regexTemplateGenerationList) <<endl;
   return 0;
 }
 

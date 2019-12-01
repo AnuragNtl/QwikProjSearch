@@ -25,7 +25,9 @@ spec.add_child(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES, properties);
 specList.push_back(make_pair("", spec));
       });
   ostringstream buf;
-  write_json(buf, specList, false);
+  ptree ss;
+  ss.push_back(make_pair("specList", specList));
+  write_json(buf, ss, false);
   return buf.str();
 }
 

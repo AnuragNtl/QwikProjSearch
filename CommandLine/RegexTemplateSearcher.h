@@ -43,8 +43,8 @@ namespace ProjSearch {
 
 	class RegexTemplateSearcher : public RegexSearcher {
 	private:
-		map<string, RegexTemplate> regexTemplates;
-	public:
+    map<string, RegexTemplate> regexTemplates;
+  public:
     vector<SearchResults> searchFor(const char *, const vector<string>);
     set<string> getAllRegexTemplateNames();
     vector<RegexTemplate> getAllRegexTemplates();
