@@ -44,3 +44,10 @@ void Projectrepository :: searchInSpecificProjects(vector<string> projects, vect
 		}
 }
 }
+
+DirectoryFilter :: DirectoryFilter(vector<string> regexes) : regexes(regexes) {}
+
+vector<string> DirectoryFilter :: operator(string directory) {
+  
+}
+

@@ -37,11 +37,14 @@ namespace ProjSearch {
     bool operator()(string directory);
   };
 
-  class DirectorySearcher {
+  class DirectoryFilter {
+    private:
+      vector<string> regexes;
     public:
-      DirectorySearcher(string directory);
-      vector<string> getMatchingFiles(vector<string> regexes);
+      DirectoryFilter(IO *io, vector<string>);
+      vector<string> operator()(string directory);
   };
 };
 
 #endif
+
