@@ -12,14 +12,13 @@ void showUsage() {
 }
 
 int main(int argc, char *argv[]) {
-/*	IoL ioL;
+	IoL ioL;
 	Io *io = &ioL;
 	cout << io->fileExists("/tmp") << "\n";
 	vector<string> dirList = io->listDirectory("/tmp");
 	for(auto it = dirList.begin(); it != dirList.end(); it++) {
 		cout << *it <<endl;
 	}
-  */
   
 	return 0;
 }

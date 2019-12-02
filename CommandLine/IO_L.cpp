@@ -28,7 +28,7 @@ vector<string> IoL :: listDirectory(string filePath) const {
 	for(boost :: filesystem :: directory_iterator it(directoryPath); 
 		it != boost :: filesystem :: directory_iterator();
 		 it++) {
-		fileList.push_back(it->path().string());
+		fileList.push_back(it->path().filename().string());
 	}
 	return fileList;
 }

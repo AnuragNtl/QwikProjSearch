@@ -40,6 +40,7 @@ namespace ProjSearch {
   class DirectoryFilter {
     private:
       vector<string> regexes;
+      IO *io;
     public:
       DirectoryFilter(IO *io, vector<string>);
       vector<string> operator()(string directory);

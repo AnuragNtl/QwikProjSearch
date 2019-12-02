@@ -40,14 +40,31 @@ void ProjectRepository :; addProjectContainerDirectory(string projectDirPath) {
 void Projectrepository :: searchInSpecificProjects(vector<string> projects, vector<string> searchRegexes) {
 	for(auto project = projects.begin(); project != projects.end(); project++) {
 		if(!projectPath.find(*project)) {
-			searcher->searchFor()
+			
 		}
 }
 }
 
-DirectoryFilter :: DirectoryFilter(vector<string> regexes) : regexes(regexes) {}
+DirectoryFilter :: DirectoryFilter(IO *io, vector<string> regexes) : regexes(regexes) {}
+
 
 vector<string> DirectoryFilter :: operator(string directory) {
-  
+  vector<string> fileList = io->listDirectory(directory);
+  vector<string> matchingFiles;
+  RegexSearcher regexSearcher;
+  for_each(fileList.begin(), fileList.end(), [&matchingFiles](string file) {
+    if(io->isFile(file)) {
+      vector<SearchResults> searchResults = regexSearcher.searchFor(file.c_str(), regexes);
+      for_each(searchResults.begin(), searchResults.end(), [&matchingFiles](SearchResults searchResult) {
+        matchingFiles.push_back(directory + "/" + searchResult.match);
+        });
+      } else {
+        vector<string> sublist = (*this)(directory);
+        for_each(subList.begin(), subList.end(), [&matchingFiles](string subDirFile) {
+          matchingFiles.push_back(subDirFile);
+          });
+      }
+      });
+  return matchingFiles;
 }
 
