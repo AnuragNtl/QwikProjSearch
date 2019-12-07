@@ -3,7 +3,10 @@
 
 #include <string>
 #include <vector>
-#include "Io.h"
+#include <map>
+#include <set>
+#include "IO.h"
+#include "Searcher.h"
 
 #define FILE_TYPE_BINARY 0
 #define FILE_TYPE_TEXT 1
@@ -16,11 +19,13 @@ namespace ProjSearch {
     	Io *io;
       map<string, vector<string> > projectPath;
       Searcher *searcher;
+      vector<string> fileFilterRegexes;
     public:
       explicit ProjectRepository(Io *io, Searcher *);
       void addProject(string projectPath);
       void addProjectContainerDirectory(string projectDirPath, set<string> exclude);
       void addProjectContainerDirectory(string projectDirPath);
+      void setFileFilters(vector<string>);
       vector<SearchResults> searchInSpecificProjects(vector<string> projects, vector<string> regex);
       vector<SearchResults> searchInAllProjects(vector<string> regex);
       vector<string> findProjects(string regex);
@@ -40,9 +45,9 @@ namespace ProjSearch {
   class DirectoryFilter {
     private:
       vector<string> regexes;
-      IO *io;
+      Io *io;
     public:
-      DirectoryFilter(IO *io, vector<string>);
+      DirectoryFilter(Io *io, vector<string>);
       vector<string> operator()(string directory);
   };
   vector<SearchResults> searchInFile(string filePath);
