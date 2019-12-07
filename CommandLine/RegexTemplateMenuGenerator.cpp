@@ -13,21 +13,6 @@
 
 using namespace ProjSearch; 
 
-string getContents(string fileName) {
-  ifstream in(fileName.c_str());
-  string buf;
-  string s = "";
-  getline(in, buf);
-  while(!in.eof()) {
-    s = s +  buf;
-    getline(in, buf);
-    if(!in.eof()) 
-      s = s + "\n";
-  }
-  in.close();
-  return s;
-}
-
 int main() {
   RegexTemplateGeneration regexTemplateGeneration(getContents("RegexTemplates.conf"));
   set<string> regexTemplateNames = regexTemplateGeneration.getRegexTemplateNames();

@@ -37,12 +37,23 @@ void ProjectRepository :; addProjectContainerDirectory(string projectDirPath) {
 	addProjectContainerDirectory(projectDirPath, set<string>());
 }
 
-void Projectrepository :: searchInSpecificProjects(vector<string> projects, vector<string> searchRegexes) {
-	for(auto project = projects.begin(); project != projects.end(); project++) {
+vector<SearchResults> ProjectRepository :: searchInSpecificProjects(vector<string> projects, vector<string> searchRegexes) {
+  vector<SearchResults> searchResults;
+  for(auto project = projects.begin(); project != projects.end(); project++) {
 		if(!projectPath.find(*project)) {
-			
-		}
+      for_each(projectPath[*project].begin(), projectPath[*project].end(), [](string projectDir) {
+          vector<SearchResults> subSearchResults = searchInSpecificProjects(projectDir);
+          for_each(subSearchResults.begin(), subSearchResults.end(), [](SearchResults searchResult) {
+              searchResults.push_back(searchResult);
+              });
+          });
+		} else {
+      //scan dir for files and apply to each file contents
+
+    }
+
 }
+return searchResults;
 }
 
 DirectoryFilter :: DirectoryFilter(IO *io, vector<string> regexes) : regexes(regexes) {}
@@ -66,5 +77,10 @@ vector<string> DirectoryFilter :: operator(string directory) {
       }
       });
   return matchingFiles;
+}
+
+vector<SearchResults> ProjSearch :: searchInFile(string filePath) {
+  string fileContents = getContents(filepath);
+  return searcher->searchFor(fileContents.c_str(), regexes);
 }
 

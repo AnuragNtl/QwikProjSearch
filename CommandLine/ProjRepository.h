@@ -45,6 +45,7 @@ namespace ProjSearch {
       DirectoryFilter(IO *io, vector<string>);
       vector<string> operator()(string directory);
   };
+  vector<SearchResults> searchInFile(string filePath);
 };
 
 #endif

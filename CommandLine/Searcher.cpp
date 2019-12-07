@@ -50,3 +50,21 @@ string SearchResults :: lineSeperator = DEFAULT_LINE_SEPERATOR;
 
 Searcher :: ~Searcher() {}
 
+namespace ProjSearch {
+string getContents(string fileName) {
+  ifstream in(fileName.c_str());
+  string buf;
+  string s = "";
+  getline(in, buf);
+  while(!in.eof()) {
+    s = s +  buf;
+    getline(in, buf);
+    if(!in.eof()) 
+      s = s + "\n";
+  }
+  in.close();
+  return s;
+}
+
+};
+

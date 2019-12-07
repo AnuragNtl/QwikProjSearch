@@ -34,6 +34,7 @@ namespace ProjSearch {
 		~Searcher();
 	};
   string replace(string, string, string);
+  string getContents(string);
 };
 
 
