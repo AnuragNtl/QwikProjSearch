@@ -1,5 +1,6 @@
 #include "ProjRepository.h"
 #include <algorithm>
+#include "RegexSearcher.h"
 
 using namespace ProjSearch;
 
@@ -47,9 +48,10 @@ vector<SearchResults> ProjectRepository :: searchInSpecificProjects(vector<strin
   vector<SearchResults> searchResults;
   for(auto project = projects.begin(); project != projects.end(); project++) {
 		if(projectPath.find(*project) != projectPath.end()) {
-      for_each(projectPath[*project].begin(), projectPath[*project].end(), [](string projectDir) {
-          vector<SearchResults> subSearchResults = searchInSpecificProjects(projectDir);
-          for_each(subSearchResults.begin(), subSearchResults.end(), [](SearchResults searchResult) {
+      for_each(projectPath[*project].begin(), projectPath[*project].end(), [&searchResults, searchRegexes, this](string projectDir) {
+          vector<string> projectDirList = {projectDir};
+          vector<SearchResults> subSearchResults = searchInSpecificProjects(projectDirList, searchRegexes);
+          for_each(subSearchResults.begin(), subSearchResults.end(), [&searchResults](SearchResults searchResult) {
               searchResults.push_back(searchResult);
               });
           });
@@ -73,11 +75,11 @@ return searchResults;
 DirectoryFilter :: DirectoryFilter(Io *io, vector<string> regexes) : regexes(regexes) {}
 
 
-vector<string> DirectoryFilter :: operator(string directory) {
+vector<string> DirectoryFilter :: operator()(string directory) {
   vector<string> fileList = io->listDirectory(directory);
   vector<string> matchingFiles;
   RegexSearcher regexSearcher;
-  for_each(fileList.begin(), fileList.end(), [&matchingFiles](string file) {
+  for_each(fileList.begin(), fileList.end(), [&matchingFiles, &regexSearcher, this](string file) {
     if(io->isFile(file)) {
       vector<SearchResults> searchResults = regexSearcher.searchFor(file.c_str(), regexes);
       for_each(searchResults.begin(), searchResults.end(), [&matchingFiles](SearchResults searchResult) {
