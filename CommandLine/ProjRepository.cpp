@@ -79,14 +79,14 @@ vector<string> DirectoryFilter :: operator()(string directory) {
   vector<string> fileList = io->listDirectory(directory);
   vector<string> matchingFiles;
   RegexSearcher regexSearcher;
-  for_each(fileList.begin(), fileList.end(), [&matchingFiles, &regexSearcher, this](string file) {
+  for_each(fileList.begin(), fileList.end(), [&matchingFiles, &regexSearcher, this, &directory](string file) {
     if(io->isFile(file)) {
       vector<SearchResults> searchResults = regexSearcher.searchFor(file.c_str(), regexes);
-      for_each(searchResults.begin(), searchResults.end(), [&matchingFiles](SearchResults searchResult) {
+      for_each(searchResults.begin(), searchResults.end(), [&matchingFiles, &directory](SearchResults searchResult) {
         matchingFiles.push_back(directory + "/" + searchResult.match);
         });
       } else {
-        vector<string> sublist = (*this)(directory);
+        vector<string> subList = (*this)(directory);
         for_each(subList.begin(), subList.end(), [&matchingFiles](string subDirFile) {
           matchingFiles.push_back(subDirFile);
           });
@@ -95,15 +95,23 @@ vector<string> DirectoryFilter :: operator()(string directory) {
   return matchingFiles;
 }
 
-vector<SearchResults> ProjSearch :: searchInFile(string filePath) {
-  string fileContents = getContents(filepath);
-  return searcher->searchFor(fileContents.c_str(), regexes);
+
+vector<SearchResults> ProjectRepository :: searchInAllProjects(vector<string> regexes) {
+  for(auto it = projectPath.begin(); it != projectPath.end(); it++) {
+    searchInSpecificProjects(it->second, regexes);
+  }
 }
 
 
-vector<SaerchResults> ProjectRepository :: searchInAllProjects(vector<string> regexes) {
+vector<string> ProjectRepository :: findProjects(string regex) {
+  vector<string> regexList{regex};
   for(auto it = projectPath.begin(); it != projectPath.end(); it++) {
-    searchInSpecificProjects(it->second, regexes);
+    RegexSearcher regexSearcher;
+    vector<string> projectDirectories = it->second;
+    projectDirectories.push_back(it->first);
+    for_each(projectDirectories.begin(), projectDirectories.end(), [](string projectdirectory) {
+        
+        });
   }
 }
 

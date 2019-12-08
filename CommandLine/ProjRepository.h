@@ -50,7 +50,6 @@ namespace ProjSearch {
       DirectoryFilter(Io *io, vector<string>);
       vector<string> operator()(string directory);
   };
-  vector<SearchResults> searchInFile(string filePath);
 };
 
 #endif
