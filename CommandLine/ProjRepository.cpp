@@ -97,21 +97,29 @@ vector<string> DirectoryFilter :: operator()(string directory) {
 
 
 vector<SearchResults> ProjectRepository :: searchInAllProjects(vector<string> regexes) {
+  vector<SearchResults> searchResults;
   for(auto it = projectPath.begin(); it != projectPath.end(); it++) {
-    searchInSpecificProjects(it->second, regexes);
+    vector<SearchResults> searchResultsSubList = searchInSpecificProjects(it->second, regexes);
+    for_each(searchResultsSubList.begin(), searchResultsSubList.end(), [&searchResults](SearchResult searchResult) {
+        searchResults.push_back(searchResult);
+        });
   }
 }
 
 
 vector<string> ProjectRepository :: findProjects(string regex) {
   vector<string> regexList{regex};
+  vector<string> matchedFiles;
   for(auto it = projectPath.begin(); it != projectPath.end(); it++) {
     RegexSearcher regexSearcher;
     vector<string> projectDirectories = it->second;
     projectDirectories.push_back(it->first);
-    for_each(projectDirectories.begin(), projectDirectories.end(), [](string projectdirectory) {
-        
+    for_each(projectDirectories.begin(), projectDirectories.end(), [regexSearcher, regexList, &matchedFiles](string projectDirectory) {
+        if(regexSearcher.searchFor(projectDirectory.c_str(), regexList).size() > 0) {
+        matchedFiles.push_back(projectDirectory);
+        }
         });
   }
+  return matchedFiles;
 }
 
