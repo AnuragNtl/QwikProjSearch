@@ -100,10 +100,11 @@ vector<SearchResults> ProjectRepository :: searchInAllProjects(vector<string> re
   vector<SearchResults> searchResults;
   for(auto it = projectPath.begin(); it != projectPath.end(); it++) {
     vector<SearchResults> searchResultsSubList = searchInSpecificProjects(it->second, regexes);
-    for_each(searchResultsSubList.begin(), searchResultsSubList.end(), [&searchResults](SearchResult searchResult) {
+    for_each(searchResultsSubList.begin(), searchResultsSubList.end(), [&searchResults](SearchResults searchResult) {
         searchResults.push_back(searchResult);
         });
   }
+  return searchResults;
 }
 
 
