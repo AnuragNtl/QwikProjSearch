@@ -61,6 +61,7 @@ vector<SearchResults> ProjectRepository :: searchInSpecificProjects(vector<strin
       vector<string> fileNamelist = directoryFilter(*project);
       for(vector<string> :: iterator it = fileNamelist.begin(); it != fileNamelist.end(); it++) {
         string filePath = *it;
+        cout << "Searching in " << filePath <<"\n";
         vector<SearchResults> fileSearchResults = searcher->searchFor(getContents(filePath).c_str(), searchRegexes);
         for_each(fileSearchResults.begin(), fileSearchResults.end(), [&searchResults] (SearchResults searchResult) {
             searchResults.push_back(searchResult);
@@ -72,21 +73,37 @@ vector<SearchResults> ProjectRepository :: searchInSpecificProjects(vector<strin
 return searchResults;
 }
 
-DirectoryFilter :: DirectoryFilter(Io *io, vector<string> regexes) : regexes(regexes) {}
+DirectoryFilter :: DirectoryFilter(Io *io, vector<string> regexes) : io(io), regexes(regexes), done(false) {}
 
+bool DirectoryFilter :: isDone() {
+  return done;
+}
 
 vector<string> DirectoryFilter :: operator()(string directory) {
+  done = false;
+  vector<string> filtered = filterDirectory(directory);
+  done = true;
+  return filtered;
+}
+
+vector<string> DirectoryFilter :: filterDirectory(string directory) {
+  if(directory[directory.size() - 1] != '/') {
+    directory = directory + "/";
+  }
   vector<string> fileList = io->listDirectory(directory);
   vector<string> matchingFiles;
   RegexSearcher regexSearcher;
   for_each(fileList.begin(), fileList.end(), [&matchingFiles, &regexSearcher, this, &directory](string file) {
-    if(io->isFile(file)) {
+      cout << "Scanning " <<file <<"\n";
+      file = directory + file;
+      if(io->isFile(file)) {
       vector<SearchResults> searchResults = regexSearcher.searchFor(file.c_str(), regexes);
-      for_each(searchResults.begin(), searchResults.end(), [&matchingFiles, &directory](SearchResults searchResult) {
-        matchingFiles.push_back(directory + "/" + searchResult.match);
-        });
-      } else {
-        vector<string> subList = (*this)(directory);
+        if(searchResults.size() > 0) {
+          filteredPaths.push(file.c_str());
+          matchingFiles.push_back(file);
+        }
+      } else if(io->isDirectory(file)) {
+        vector<string> subList = (*this)(file);
         for_each(subList.begin(), subList.end(), [&matchingFiles](string subDirFile) {
           matchingFiles.push_back(subDirFile);
           });
@@ -94,7 +111,6 @@ vector<string> DirectoryFilter :: operator()(string directory) {
       });
   return matchingFiles;
 }
-
 
 vector<SearchResults> ProjectRepository :: searchInAllProjects(vector<string> regexes) {
   vector<SearchResults> searchResults;

@@ -7,7 +7,7 @@ namespace ProjSearch {
 
 	class PlainSearcher : public Searcher {
 	public:
-		vector<SearchResults> searchfor(const char *, const vector<string>);
+		vector<SearchResults> searchFor(const char *, const vector<string>) const;
 	};
 
 };

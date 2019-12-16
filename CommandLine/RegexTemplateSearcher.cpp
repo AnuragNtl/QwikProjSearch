@@ -49,7 +49,7 @@ const char* RegexTemplateException :: what() const throw() {
 /*
  * 
  */
-vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> regexTemplateSpecifiers) {
+vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> regexTemplateSpecifiers) const {
   vector<string> regexList;
   regexList.resize(regexTemplateSpecifiers.size());
   transform(regexTemplateSpecifiers.begin(), regexTemplateSpecifiers.end(), regexList.begin(), [&data, this] (string regexTemplateSpecifier) {
@@ -59,7 +59,7 @@ vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const
      read_json(input, regexTemplateSpecification);
      string templateName = regexTemplateSpecification.get_child(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME).get_value<string>();
      ptree templateProperties = regexTemplateSpecification.get_child(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES);
-   RegexTemplate regexTemplate = regexTemplates[templateName];  
+   RegexTemplate regexTemplate = (regexTemplates.find(templateName))->second;
      for(ptree :: iterator it = templateProperties.begin(); it != templateProperties.end(); it++) {
       regexTemplate[it->first] = templateProperties.get_child(it->first).get_value<string>();
      }

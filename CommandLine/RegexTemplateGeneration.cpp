@@ -12,7 +12,7 @@ RegexTemplateGeneration :: RegexTemplateGeneration(string source) {
 }
 
 string RegexTemplateGeneration :: generateSpec(vector<RegexTemplate> regexTemplateList) {
-  ptree specList;
+  ostringstream specList;
   for_each(regexTemplateList.begin(), regexTemplateList.end(), [&specList] (RegexTemplate regexTemplate) {    
   ptree spec;
   ptree properties;
@@ -22,13 +22,11 @@ for(auto it = propertyNames.begin(); it != propertyNames.end(); it++) {
   properties.put(*it, regexTemplate[*it]);
 }
 spec.add_child(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES, properties);
-specList.push_back(make_pair("", spec));
+ostringstream buf;
+write_json(buf, spec, false);
+specList << buf.str();
       });
-  ostringstream buf;
-  ptree ss;
-  ss.push_back(make_pair("specList", specList));
-  write_json(buf, ss, false);
-  return buf.str();
+  return specList.str();
 }
 
 string RegexTemplateGeneration :: getSpecByName(string name) {

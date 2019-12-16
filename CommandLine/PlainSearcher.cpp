@@ -1,20 +1,27 @@
 #include "PlainSearcher.h"
+#include <algorithm>
 
 using namespace ProjSearch;
 
 using namespace std;
 
-vector<SearchResults> PlainSearcher :: searchFor(const char *rawData, const vector<string> toSearch) {
+vector<SearchResults> PlainSearcher :: searchFor(const char *rawData, const vector<string> toSearch)  const {
 	string data = rawData;
 	vector<SearchResults> searchResults;
+  for_each(toSearch.begin(), toSearch.end(), [&data, &toSearch, &searchResults] (string searchItem) {
 	int indx = 0;
 	do {
-	indx = data.find(toSearch, indx);
+	indx = data.find(searchItem, indx);
 	if(indx != string::npos) {
 		int row, col;
-		SearchResults :: setRowAndCol(toSearch(data, indx, row, col));
-		searchresults.push_back(SearchResults(row, col, indx));
+    string substr;
+		SearchResults :: setRowAndCol(data, indx, row, col);
+		searchResults.push_back(SearchResults(row, col, indx, 0, searchItem));
+    indx++;
 	}
 	} while(indx != string::npos);
+  });
+
 	return searchResults;
 }
+

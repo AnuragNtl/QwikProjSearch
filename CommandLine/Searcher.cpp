@@ -1,10 +1,11 @@
 #include "Searcher.h"
 #include <fstream>
+#include <sstream>
 
 using namespace ProjSearch;
 using namespace std;
 
-SearchResults :: SearchResults(string filePath, int row, int col, int offset, int fType) : filePath(filePath), row(row), col(col), offset(offset), fileType(fType) {}
+SearchResults :: SearchResults(int row, int col, int offset, int fType, string match) : row(row), col(col), offset(offset), fileType(fType), match(match) {}
 
 void Searcher :: readFromPath(string filePath) {
   this->filePath = filePath;
@@ -21,9 +22,9 @@ void Searcher :: readFromPath(string filePath) {
 
 
 void SearchResults :: setRowAndCol(string source, int offset, int &row, int &col) {
-	int count = 0, pPosition = 0;
-	for(int i = 0; i != string::npos; i = source.find(lineSeperator, i) ) {
-		pPosition = i;
+	int count = 1 , pPosition = 0;
+	for(int i = source.find(lineSeperator, 0); i != string::npos && i < offset ; i = source.find(lineSeperator, ++i)) {
+		pPosition = i + 1;
 		count++;
 	}
 	col = offset - pPosition;
@@ -67,4 +68,12 @@ string getContents(string fileName) {
 }
 
 };
+
+
+SearchResults :: operator string() {
+  ostringstream out;
+  out << "SearchResult( filePath = " << this->filePath << "(row, col) = (" << row <<"," << col
+    << ")" << " offset = " << offset << " match = " << match << " fileType = " <<fileType << ")";
+  return out.str();
+}
 

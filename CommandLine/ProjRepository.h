@@ -7,11 +7,14 @@
 #include <set>
 #include "IO.h"
 #include "Searcher.h"
+#include <boost/lockfree/queue.hpp>
 
 #define FILE_TYPE_BINARY 0
 #define FILE_TYPE_TEXT 1
 
 using namespace std;
+
+using namespace boost::lockfree;
 
 namespace ProjSearch {
   class ProjectRepository {
@@ -46,9 +49,13 @@ namespace ProjSearch {
     private:
       vector<string> regexes;
       Io *io;
+      volatile bool done;
+      vector<string> filterDirectory(string);
+      queue<const char *> filteredPaths;
     public:
       DirectoryFilter(Io *io, vector<string>);
       vector<string> operator()(string directory);
+      bool isDone();
   };
 };
 

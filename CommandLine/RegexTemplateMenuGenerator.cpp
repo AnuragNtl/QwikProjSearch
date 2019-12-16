@@ -44,7 +44,7 @@ set<string> propertyNames = regexTemplate.getPlaceHolderNames();
 regexTemplateGenerationList.push_back(regexTemplate);
   }
  } while(choice != exitChoice);
-  cout << regexTemplateGeneration.generateSpec(regexTemplateGenerationList) <<endl;
+  cout << regexTemplateGeneration.generateSpec(regexTemplateGenerationList);
   return 0;
 }
 

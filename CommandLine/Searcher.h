@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ using namespace std;
 
 namespace ProjSearch {
 	struct SearchResults {
-		SearchResults(string filePath, int row, int col, int, int);
+		SearchResults(int row, int col, int, int, string);
 		SearchResults(int row, int col, int offset) : row(row), col(col) {
 			this->offset = offset;
 		}
@@ -21,6 +22,7 @@ namespace ProjSearch {
 		static string lineSeperator;
 		static void setRowAndCol(string source, int offset, int &row, int &col);
     string match;
+    operator string();
 	};
 
 
@@ -29,7 +31,7 @@ namespace ProjSearch {
     protected:
       string filePath;
 	public:
-		virtual vector<SearchResults> searchFor(const char *data, const vector<string>) { return vector<SearchResults>();}
+		virtual vector<SearchResults> searchFor(const char *data, const vector<string>) const {  return vector<SearchResults>();}
     void readFromPath(string);
 		~Searcher();
 	};
