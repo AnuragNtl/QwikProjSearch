@@ -52,11 +52,9 @@ namespace ProjSearch {
       volatile bool done;
       vector<string> filterDirectory(string);
       queue<string> filteredPaths;
-      mutex filteredPathsMutex;
+      mutex *filteredPathsMutex;
     public:
-      DirectoryFilter(DirectoryFilter &) {}
-      DirectoryFilter(const DirectoryFilter &){}
-      DirectoryFilter(DirectoryFilter &&, Io* &&, vector<string> &&) {}
+      DirectoryFilter(const DirectoryFilter &);
       DirectoryFilter(Io *io, vector<string>);
       vector<string> operator()(string directory);
       DirectoryFilter& operator>>(string &directory);
