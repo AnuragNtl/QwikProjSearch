@@ -87,37 +87,46 @@ vector<SearchResults> ProjectRepository :: searchInSpecificProjects(vector<strin
 return searchResults;
 }
 
-DirectoryFilter :: DirectoryFilter(Io *io, vector<string> regexes) : io(io), regexes(regexes), done(false), filteredPathsMutex(new mutex) {}
+DirectoryFilter :: DirectoryFilter(Io *io, vector<string> regexes) : io(io), regexes(regexes), done(new bool(false)), filteredPathsMutex(new mutex), filteredPaths(new queue<string>) {}
 
-DirectoryFilter :: DirectoryFilter(const DirectoryFilter &directoryFilter) : DirectoryFilter(directoryFilter.io, directoryFilter.regexes) {
+/*  DirectoryFilter :: DirectoryFilter(const DirectoryFilter &directoryFilter) : DirectoryFilter(directoryFilter.io, directoryFilter.regexes) {
   this->filteredPaths = directoryFilter.filteredPaths;
   this->filteredPathsMutex = directoryFilter.filteredPathsMutex;
+  
+}
+*/
+
+DirectoryFilter :: ~DirectoryFilter() {
+  if(isDone()) {
+    delete done;
+    delete filteredPathsMutex;
+    delete filteredPaths;
+  }
 }
 
-
 bool DirectoryFilter :: isDone() const {
-  return done && filteredPaths.empty();
+  return *done && filteredPaths->empty();
 }
 
 vector<string> DirectoryFilter :: operator()(string directory) {
-  done = false;
+  *done = false;
   vector<string> filtered = filterDirectory(directory);
-  done = true;
+  *done = true;
   return filtered;
 }
 
 DirectoryFilter& DirectoryFilter :: operator>>(string &directory) {
   while(true) {
     filteredPathsMutex->lock();
-    bool isNotEmpty = !filteredPaths.empty();
+    bool isNotEmpty = !filteredPaths->empty();
     filteredPathsMutex->unlock();
     if(isNotEmpty) {
       break;
     }
   }
   filteredPathsMutex->lock();
-  directory = filteredPaths.front();
-  filteredPaths.pop();
+  directory = filteredPaths->front();
+  filteredPaths->pop();
   filteredPathsMutex->unlock();
   return *this;
 }
@@ -136,7 +145,7 @@ vector<string> DirectoryFilter :: filterDirectory(string directory) {
       vector<SearchResults> searchResults = regexSearcher.searchFor(file.c_str(), regexes);
         if(searchResults.size() > 0) {
           filteredPathsMutex->lock();
-          filteredPaths.push(file.c_str());
+          filteredPaths->push(file.c_str());
           filteredPathsMutex->unlock();
           matchingFiles.push_back(file);
         }

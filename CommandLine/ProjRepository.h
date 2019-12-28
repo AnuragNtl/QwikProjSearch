@@ -49,16 +49,17 @@ namespace ProjSearch {
     private:
       vector<string> regexes;
       Io *io;
-      volatile bool done;
+      volatile bool *done;
       vector<string> filterDirectory(string);
-      queue<string> filteredPaths;
+      queue<string> *filteredPaths;
       mutex *filteredPathsMutex;
     public:
-      DirectoryFilter(const DirectoryFilter &);
+      //DirectoryFilter(const DirectoryFilter &);
       DirectoryFilter(Io *io, vector<string>);
       vector<string> operator()(string directory);
       DirectoryFilter& operator>>(string &directory);
       bool isDone() const ;
+      ~DirectoryFilter();
   };
 };
 

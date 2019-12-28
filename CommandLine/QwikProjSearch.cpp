@@ -91,6 +91,7 @@ int main(int argc, char *argv[]) {
   for(auto it = fileList.begin(); it != fileList.end(); it++) {
     cout << *it <<endl;
   }
+  projectRepository.setFileFilters({".*\.cpp$", ".*\.h$"});
   cout << projectRepository.searchInSpecificProjects(projectDirectories, toSearch);
   /*  vector<string> projects = {"the quick brown fox\njumps\nover the lazy dog"};
   vector<string> regexes = {"t.", ".o."};
