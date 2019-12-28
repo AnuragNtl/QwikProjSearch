@@ -20,9 +20,7 @@ ProjectRepository :: ProjectRepository(Io *io, Searcher *s) : io(io), searcher(s
 }
 
 void ProjectRepository :: addProject(string projectPath) {
-	vector<string> projectPathVector;
-	projectPathVector.push_back(projectPath);
-	this->projectPath.insert(pair<string, vector<string> >(projectPath, projectPathVector));
+	this->projectPath[projectPath] = vector<string>();
 }
 
 
@@ -48,7 +46,7 @@ void ProjectRepository :: setFileFilters(vector<string> fileFilterRegexes) {
 vector<SearchResults> ProjectRepository :: searchInSpecificProjects(vector<string> projects, vector<string> searchRegexes) {
   vector<SearchResults> searchResults;
   for(auto project = projects.begin(); project != projects.end(); project++) {
-		if(projectPath.find(*project) != projectPath.end()) {
+		if(projectPath.find(*project) != projectPath.end() && projectPath[*project].size() > 0) {
       for_each(projectPath[*project].begin(), projectPath[*project].end(), [&searchResults, searchRegexes, this](string projectDir) {
           vector<string> projectDirList = {projectDir};
           vector<SearchResults> subSearchResults = searchInSpecificProjects(projectDirList, searchRegexes);
@@ -63,7 +61,7 @@ vector<SearchResults> ProjectRepository :: searchInSpecificProjects(vector<strin
       thread filterThread(directoryFilter, *project);
       /*for(vector<string> :: iterator it = fileNamelist.begin(); it != fileNamelist.end(); it++) {
         string filePath = *it;
-        cout << "Searching in " << filePath <<"\n";
+        //cout << "Searching in " << filePath <<"\n";
         vector<SearchResults> fileSearchResults = searcher->searchFor(getContents(filePath).c_str(), searchRegexes);
         for_each(fileSearchResults.begin(), fileSearchResults.end(), [&searchResults] (SearchResults searchResult) {
             searchResults.push_back(searchResult);
@@ -73,14 +71,15 @@ vector<SearchResults> ProjectRepository :: searchInSpecificProjects(vector<strin
       while(!directoryFilter.isDone()) {
         string filePath;
         directoryFilter >> filePath;
-        cout << "Searching in " << filePath <<"\n";
+        cerr << "Searching in " << filePath <<"\n";
         vector<SearchResults> fileSearchResults = searcher->searchFor(getContents(filePath).c_str(), searchRegexes); 
-        for_each(fileSearchResults.begin(), fileSearchResults.end(), [&searchResults] (SearchResults searchResult) {
+        for_each(fileSearchResults.begin(), fileSearchResults.end(), [&searchResults, filePath] (SearchResults searchResult) {
+            searchResult.filePath = filePath;
             searchResults.push_back(searchResult);
             });
       }
         filterThread.join();
-        cout << "Done\n";
+        //cout << "Done\n";
     }
 
 }
@@ -139,7 +138,7 @@ vector<string> DirectoryFilter :: filterDirectory(string directory) {
   vector<string> matchingFiles;
   RegexSearcher regexSearcher;
   for_each(fileList.begin(), fileList.end(), [&matchingFiles, &regexSearcher, this, &directory](string file) {
-      cout << "Scanning " <<file <<"\n";
+      cerr << "Scanning " <<file <<"\n";
       file = directory + file;
       if(io->isFile(file)) {
       vector<SearchResults> searchResults = regexSearcher.searchFor(file.c_str(), regexes);

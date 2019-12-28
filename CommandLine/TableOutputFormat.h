@@ -1,10 +1,10 @@
-#ifndef JSON_OUTPUT_FORMAT_H
-#define JSON_OUTPUT_FORMAT_H
+#ifndef TABLE_OUTPUT_FORMAT_H
+#define TABLE_OUTPUT_FORMAT_H
 
 #include "OutputFormat.h"
 
 namespace ProjSearch {
-  class JsonOutputFormat : public OutputFormat {
+  class TableOutputFormat : public OutputFormat {
     public:
       ostream& format(ostream &);
   };

@@ -9,6 +9,10 @@
 #include "RegexSearcher.h"
 #include "RegexTemplateSearcher.h" 
 #include "ProjRepository.h"
+#include "OutputFormat.h"
+#include "JsonOutputFormat.h"
+#include "TableOutputFormat.h"
+#include "CsvOutputFormat.h"
 
 using namespace std;
 
@@ -32,10 +36,18 @@ vector<string> loadProjects(Io *io);
 vector<string> loadProjectContainerDirectories(Io *io);
 
 map<char, Searcher*> chosenSearcherMap;
+map<char, OutputFormat*> chosenOutputFormatMap;
+
 void initChosenSearchers() {
   chosenSearcherMap['p'] = new PlainSearcher;
   chosenSearcherMap['r'] = new RegexSearcher;
   chosenSearcherMap['R'] = new RegexTemplateSearcher;
+}
+
+void initChosenOutputFormat() {
+  chosenOutputFormatMap['s'] = new TableOutputFormat;
+  chosenOutputFormatMap['t'] = new CsvOutputFormat;
+  chosenOutputFormatMap['u'] = new JsonOutputFormat;
 }
 
 int main(int argc, char *argv[]) {
@@ -49,6 +61,7 @@ int main(int argc, char *argv[]) {
   
   string projectFilter = ".*", fileFilter = ".*";
   Searcher *chosenSearcher = NULL;
+  OutputFormat *chosenOutputFormat = NULL;
   while(opt != -1) {
     switch(opt) {
       case 'p':
@@ -62,18 +75,23 @@ int main(int argc, char *argv[]) {
       case 's':
       case 't':
       case 'u':
+        chosenOutputFormat = chosenOutputFormatMap[opt];
         break;
       case 'n':
         projectFilter = optarg;
         break;
       default:
         cout << "Invalid option " << (char)opt <<endl;
-        break;
+        showUsage();
+        return 1;
     }
       opt = getopt(argc, argv, optString); 
   }
   if(chosenSearcher == NULL) {
     chosenSearcher = new RegexTemplateSearcher;
+  }
+  if(chosenOutputFormat == NULL) {
+    chosenOutputFormat = new TableOutputFormat;
   }
   IoL *ioL = new IoL;
   ProjectRepository projectRepository(ioL, chosenSearcher);
@@ -85,34 +103,27 @@ int main(int argc, char *argv[]) {
   for_each(projectContainerDirectories.begin(), projectContainerDirectories.end(), [&projectRepository] (string directory) {
       projectRepository.addProjectContainerDirectory(directory);
       });
-  projectDirectories.push_back("/sdcard/I/QwikProjSearch/CommandLine/");
-  vector<string> toSearch = {"the", "earch"};
-  vector<string> fileList = ioL->listDirectory(projectDirectories[0]);
-  for(auto it = fileList.begin(); it != fileList.end(); it++) {
-    cout << *it <<endl;
-  }
-  projectRepository.setFileFilters({".*\\.cpp$", ".*\\.h$"});
-  cout << projectRepository.searchInSpecificProjects(projectDirectories, toSearch);
-  /*  vector<string> projects = {"the quick brown fox\njumps\nover the lazy dog"};
-  vector<string> regexes = {"t.", ".o."};
-  vector<SearchResults> searchResults = (new RegexSearcher)->searchFor(projects[0].c_str(), regexes);
-  cout << searchResults;*/
-  //projectRepository.searchInSpecificProjects(projects, regexes); 
-	/*IoL ioL;
-	Io *io = &ioL;
-	cout << io->fileExists("/tmp") << "\n";
-	vector<string> dirList = io->listDirectory("/tmp");
-	for(auto it = dirList.begin(); it != dirList.end(); it++) {
-		cout << *it <<endl;
-	}*/
+  projectRepository.setFileFilters(splitString(fileFilter, ","));
+  vector<string> toSearch;
   
+  while(!cin.eof()) {
+    string spec;
+    getline(cin, spec);
+    if(!cin.eof())
+      toSearch.push_back(spec);
+  }
+  vector<SearchResults> searchResults = projectRepository.searchInSpecificProjects(projectDirectories, toSearch);
+  
+  OutputFormat &outputFormat = *chosenOutputFormat;
+  cout << outputFormat(searchResults);
+    
 	return 0;
 }
 
 
 void showUsage() {
 
-string usage = "\tUsage:\nQwikProjSearch [...OPTIONS] [ProjectPaths...]\n\nReads Search specifiers from stdin and outputs the results\n-p Use Plain searcher\n-r Use regex searcher\n-R Default Use RegexTemplateSearcher\n-f FileFilter : FileFilter to use\n-s Use raw output format\n-t Use CSV output format\n-u Use \n-n Regex : Regex to use to filter projects\n\n";
+string usage = "\tUsage:\nQwikProjSearch [...OPTIONS] [ProjectPaths...]\n\nReads Search specifiers from stdin and outputs the results\n-p Use Plain searcher\n-r Use regex searcher\n-R Default Use RegexTemplateSearcher\n-f FileFilter : FileFilter to use\n-s Use Table output format\n-t Use CSV output format\n-u Use JSON output format \n-n Regex : Regex to use to filter projects\n\n";
 cout << usage;
 
 }

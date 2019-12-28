@@ -1,10 +1,10 @@
-#ifndef JSON_OUTPUT_FORMAT_H
-#define JSON_OUTPUT_FORMAT_H
+#ifndef CSV_OUTPUT_FORMAT_H
+#define CSV_OUTPUT_FORMAT_H
 
 #include "OutputFormat.h"
 
 namespace ProjSearch {
-  class JsonOutputFormat : public OutputFormat {
+  class CsvOutputFormat : public OutputFormat {
     public:
       ostream& format(ostream &);
   };
