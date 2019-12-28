@@ -85,8 +85,8 @@ int main(int argc, char *argv[]) {
   for_each(projectContainerDirectories.begin(), projectContainerDirectories.end(), [&projectRepository] (string directory) {
       projectRepository.addProjectContainerDirectory(directory);
       });
-  projectDirectories.push_back("/home/administrator/QwikProjSearch/CommandLine/");
-  vector<string> toSearch = {"the"};
+  projectDirectories.push_back("/sdcard/I/QwikProjSearch/CommandLine/");
+  vector<string> toSearch = {"the", "earch"};
   vector<string> fileList = ioL->listDirectory(projectDirectories[0]);
   for(auto it = fileList.begin(); it != fileList.end(); it++) {
     cout << *it <<endl;
