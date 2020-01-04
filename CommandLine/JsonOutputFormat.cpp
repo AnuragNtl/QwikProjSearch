@@ -8,7 +8,19 @@ using namespace boost :: property_tree;
 
 ostream& JsonOutputFormat :: format(ostream &out) {
   ptree specList;
-  for(auto it = )
+  for(auto it = searchResults.begin(); it != searchResults.end(); it++) {
+    ptree spec;
+    spec.put("row", it->row);
+    spec.put("col", it->col);
+    spec.put("filePath", it->filePath);
+    spec.put("offset", it->offset);
+    spec.put("fileType", it->fileType);
+    spec.put("match", it->match);
+    specList.add_child("", spec);
+  }
+  ptree data;
+  data.add_child("searchResults", specList);
+  write_json(out, data);
   return out;
 }
 

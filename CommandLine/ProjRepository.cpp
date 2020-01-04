@@ -144,12 +144,12 @@ vector<string> DirectoryFilter :: filterDirectory(string directory) {
       vector<SearchResults> searchResults = regexSearcher.searchFor(file.c_str(), regexes);
         if(searchResults.size() > 0) {
           filteredPathsMutex->lock();
-          filteredPaths->push(file.c_str());
+          filteredPaths->push(file);
           filteredPathsMutex->unlock();
           matchingFiles.push_back(file);
         }
       } else if(io->isDirectory(file)) {
-        vector<string> subList = (*this)(file);
+        vector<string> subList = filterDirectory(file);
         for_each(subList.begin(), subList.end(), [&matchingFiles](string subDirFile) {
           matchingFiles.push_back(subDirFile);
           });

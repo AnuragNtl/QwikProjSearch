@@ -30,6 +30,7 @@ ostream& operator<<(ostream &out, vector<SearchResults> searchResults) {
   }
   out <<"]";
   out <<"\n";
+  return out;
 }
 
 vector<string> loadProjects(Io *io);
@@ -56,6 +57,7 @@ int main(int argc, char *argv[]) {
     return 0;
   }
   initChosenSearchers();
+  initChosenOutputFormat();
   char optString[] = "prRf:stun:";
   int opt = getopt(argc, argv, optString);
   
