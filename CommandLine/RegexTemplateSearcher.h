@@ -37,7 +37,7 @@ namespace ProjSearch {
   };
   class RegexTemplateExtractor {
     public:
-     virtual RegexTemplate extractFromString(string regexTemplateSpecifier);
+     static RegexTemplate extractFromString(string regexTemplateSpecifier);
 
   };
 

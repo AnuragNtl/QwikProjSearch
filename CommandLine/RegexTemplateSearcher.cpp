@@ -89,7 +89,12 @@ namespace ProjSearch {
 RegexTemplate RegexTemplateExtractor :: extractFromString(string regexTemplateSpecifier) {
   vector<string> spec = splitString(regexTemplateSpecifier, " ");
   string regexTemplateName = spec[0];
-  string regexTemplateSpec = spec[1];
+  string regexTemplateSpec = "";
+  int i;
+  for(i = 1; i < spec.size() - 1; i++) {
+    regexTemplateSpec = regexTemplateSpec + spec[i] + " ";
+  }
+  regexTemplateSpec = regexTemplateSpec + spec[i];
   RegexTemplate regexTemplate(regexTemplateSpec, regexTemplateName);
   return regexTemplate;
 }
@@ -99,12 +104,8 @@ map<string, RegexTemplate> ProjSearch :: loadRegexTemplates(string source) {
   map<string, RegexTemplate> regexTemplateMap;
   vector<string> specs = ProjSearch::splitString(source, "\n");
     for(vector<string> :: iterator it = specs.begin(); it != specs.end(); it++) {
-    string regexTemplateName, regexTemplateSpec;
-    vector<string> spec = ProjSearch::splitString(*it, string(" "));
-    regexTemplateName = spec[0];
-    regexTemplateSpec = spec[1];
-    RegexTemplate regexTemplate(regexTemplateSpec, regexTemplateName);
-    regexTemplateMap[regexTemplateName] = regexTemplate;
+    RegexTemplate regexTemplate = RegexTemplateExtractor::extractFromString(*it);
+    regexTemplateMap[regexTemplate.regexTemplateName] = regexTemplate;
   }
     return regexTemplateMap;
 }
