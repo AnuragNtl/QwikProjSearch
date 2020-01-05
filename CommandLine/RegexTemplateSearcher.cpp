@@ -24,7 +24,6 @@ string RegexTemplate :: applyAndGetRegex() {
 	for(map<string, string> :: iterator it = placeHolders.begin(); it != placeHolders.end(); it++) {
     string replaceValue = it->first;
     string toReplaceWith = it->second;
-    toReplaceWith = REGEX_TEMPLATE_WRAPPER_START + toReplaceWith + REGEX_TEMPLATE_WRAPPER_END;
     tempRegexTemplate = replace(tempRegexTemplate, replaceValue, toReplaceWith);
 	}
 	return tempRegexTemplate;
@@ -42,13 +41,14 @@ set<string> RegexTemplate :: getPlaceHolderNames() {
   return placeHolderNames;
 }
 
+RegexTemplateException :: RegexTemplateException(string message) : message(message) {}
+
 const char* RegexTemplateException :: what() const throw() {
-  return "Wrong Regex Template";
+  return ("Regex Template Error : " + message).c_str();
 }
 
-/*
- * 
- */
+RegexTemplateSearcher :: RegexTemplateSearcher(map<string, RegexTemplate> regexTemplates) : regexTemplates(regexTemplates) {}
+
 vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const vector<string> regexTemplateSpecifiers) const {
   vector<string> regexList;
   regexList.resize(regexTemplateSpecifiers.size());
@@ -59,6 +59,9 @@ vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const
      read_json(input, regexTemplateSpecification);
      string templateName = regexTemplateSpecification.get_child(REGEX_TEMPLATE_SPEC_TEMPLATE_NAME).get_value<string>();
      ptree templateProperties = regexTemplateSpecification.get_child(REGEX_TEMPLATE_SPEC_TEMPLATE_PROPERTIES);
+     if(regexTemplates.find(templateName) == regexTemplates.end()) {
+      throw RegexTemplateException("No regex template found");
+     }
    RegexTemplate regexTemplate = (regexTemplates.find(templateName))->second;
      for(ptree :: iterator it = templateProperties.begin(); it != templateProperties.end(); it++) {
       regexTemplate[it->first] = templateProperties.get_child(it->first).get_value<string>();
@@ -66,7 +69,7 @@ vector<SearchResults> RegexTemplateSearcher :: searchFor(const char *data, const
      return regexTemplate.applyAndGetRegex();
      }
    catch(boost::exception &e) {
-    throw RegexTemplateException(); 
+    throw RegexTemplateException("Wrong Regex Template"); 
    }
       });
   return RegexSearcher :: searchFor(data, regexList);

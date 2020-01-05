@@ -32,7 +32,11 @@ namespace ProjSearch {
 	};
 
   class RegexTemplateException : public std::exception {
+    private:
+      string message;
     public:
+      RegexTemplateException(){}
+      RegexTemplateException(string message);
       const char* what() const throw() ;
   };
   class RegexTemplateExtractor {
@@ -45,6 +49,8 @@ namespace ProjSearch {
 	private:
     map<string, RegexTemplate> regexTemplates;
   public:
+    RegexTemplateSearcher(){}
+    RegexTemplateSearcher(map<string, RegexTemplate> regexTemplates);
     vector<SearchResults> searchFor(const char *, const vector<string>) const ;
     set<string> getAllRegexTemplateNames();
     vector<RegexTemplate> getAllRegexTemplates();

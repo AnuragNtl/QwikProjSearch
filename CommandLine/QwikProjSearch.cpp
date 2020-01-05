@@ -39,10 +39,14 @@ vector<string> loadProjectContainerDirectories(Io *io);
 map<char, Searcher*> chosenSearcherMap;
 map<char, OutputFormat*> chosenOutputFormatMap;
 
-void initChosenSearchers() {
+void initChosenSearchers(Io *io) {
   chosenSearcherMap['p'] = new PlainSearcher;
   chosenSearcherMap['r'] = new RegexSearcher;
-  chosenSearcherMap['R'] = new RegexTemplateSearcher;
+  if(io->fileExists("RegexTemplates.conf")) {
+    chosenSearcherMap['R'] = new RegexTemplateSearcher(loadRegexTemplates(getContents("RegexTemplates.conf")));
+  } else {
+    chosenSearcherMap['R'] = new RegexTemplateSearcher;
+  }
 }
 
 void initChosenOutputFormat() {
@@ -56,7 +60,8 @@ int main(int argc, char *argv[]) {
     showUsage();
     return 0;
   }
-  initChosenSearchers();
+  Io *ioL = new IoL;
+  initChosenSearchers(ioL);
   initChosenOutputFormat();
   char optString[] = "prRf:stun:";
   int opt = getopt(argc, argv, optString);
@@ -95,7 +100,6 @@ int main(int argc, char *argv[]) {
   if(chosenOutputFormat == NULL) {
     chosenOutputFormat = new TableOutputFormat;
   }
-  IoL *ioL = new IoL;
   ProjectRepository projectRepository(ioL, chosenSearcher);
   vector<string> projectDirectories = loadProjects(ioL);
   vector<string> projectContainerDirectories = loadProjectContainerDirectories(ioL);
