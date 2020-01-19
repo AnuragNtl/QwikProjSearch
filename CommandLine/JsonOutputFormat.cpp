@@ -16,7 +16,7 @@ ostream& JsonOutputFormat :: format(ostream &out) {
     spec.put("offset", it->offset);
     spec.put("fileType", it->fileType);
     spec.put("match", it->match);
-    specList.add_child("", spec);
+    specList.push_back(std::make_pair("", spec));
   }
   ptree data;
   data.add_child("searchResults", specList);
